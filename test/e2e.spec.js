@@ -1,4 +1,4 @@
-require('chromedriver');
+const chromedriver = require('chromedriver');
 const fs = require('fs');
 const assert = require("assert");
 const chrome = require('selenium-webdriver/chrome');
