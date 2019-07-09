@@ -3,16 +3,15 @@ const fs = require('fs');
 const assert = require("assert");
 const chrome = require('selenium-webdriver/chrome');
 const { promisify } = require('util');
-
 const webdriver = require("selenium-webdriver");
 const { Builder, By, until } = webdriver;
-
 const service = new chrome.ServiceBuilder(path).build();
 chrome.setDefaultService(service);
 
 let driver;
 
 jest.setTimeout(10000);
+console.log(path);
 
 // コンテンツサイズにウインドウを合わせてキャプチャをとる
 async function takeScreentJust(driver, fileName, ext)
@@ -40,7 +39,8 @@ describe("デモ", () => {
   
   beforeAll(() => {
     driver = new Builder()
-        .forBrowser('chrome')
+        .withCapabilities(webdriver.Capabilities.chrome())
+        //.forBrowser('chrome')
         .setChromeOptions(new chrome.Options().headless())
         .build();
   });
