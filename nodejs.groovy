@@ -13,6 +13,7 @@ job('NodeJS Job') {
     }
     steps {
         shell("npm install")
+        shell("pretest_e2e")
         shell("npm test")
     }
 }
