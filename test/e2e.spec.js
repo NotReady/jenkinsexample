@@ -1,4 +1,4 @@
-const chromedriver = require('chromedriver');
+const path = require('chromedriver').path;
 const fs = require('fs');
 const assert = require("assert");
 const chrome = require('selenium-webdriver/chrome');
@@ -6,6 +6,9 @@ const { promisify } = require('util');
 
 const webdriver = require("selenium-webdriver");
 const { Builder, By, until } = webdriver;
+
+const service = new chrome.ServiceBuilder(path).build();
+chrome.setDefaultService(service);
 
 let driver;
 
