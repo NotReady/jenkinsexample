@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "jest"
+    "install-chromedriver": "node node_modules/chromedriver/install.js",
+    "pretest_e2e": "npm run install-chromedriver",
   },
   "keywords": [],
   "author": "",
