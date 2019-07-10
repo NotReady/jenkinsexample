@@ -10,7 +10,7 @@ chrome.setDefaultService(service);
 
 let driver;
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 console.log(path);
 
 // コンテンツサイズにウインドウを合わせてキャプチャをとる
