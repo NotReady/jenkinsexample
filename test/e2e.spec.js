@@ -40,7 +40,7 @@ describe("デモ", () => {
   beforeAll(() => {
         var options = new chrome.Options();
         options.addArguments('headless');
-        options.addArguments('no-sandbox');     
+        //options.addArguments('no-sandbox');     
           
         driver = new Builder()
         .forBrowser('chrome')
