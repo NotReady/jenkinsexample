@@ -38,10 +38,14 @@ async function takeScreentJust(driver, fileName, ext)
 describe("デモ", () => {
   
   beforeAll(() => {
-    driver = new Builder()
-        //.withCapabilities(webdriver.Capabilities.chrome())
+        var options = new chrome.Options();
+        options.addArguments('headless');
+        options.addArguments('no-sandbox');     
+          
+        driver = new Builder()
         .forBrowser('chrome')
-        .setChromeOptions(new chrome.Options().headless())
+        .withCapabilities(webdriver.Capabilities.chrome())
+        .setChromeOptions(options)
         .build();
   });
 
