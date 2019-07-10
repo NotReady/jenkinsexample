@@ -39,8 +39,8 @@ describe("デモ", () => {
   
   beforeAll(() => {
     driver = new Builder()
-        .withCapabilities(webdriver.Capabilities.chrome())
-        //.forBrowser('chrome')
+        //.withCapabilities(webdriver.Capabilities.chrome())
+        .forBrowser('chrome')
         .setChromeOptions(new chrome.Options().headless())
         .build();
   });
