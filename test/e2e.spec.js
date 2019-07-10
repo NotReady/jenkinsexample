@@ -55,6 +55,8 @@ describe("デモ", () => {
 
   it("トップページ ページタイトル", async () => {
 
+
+    console.log('trace 1');
     // テスト対象のページへアクセス
     await driver.get(
         "https://www.securite.jp/"
@@ -63,14 +65,17 @@ describe("デモ", () => {
     // トップページのロード待ち
     await driver.wait(until.titleContains('セキュリテ'), 10000);
 
+    console.log('trace 2');
     await driver.getTitle().then(function (title) {
       
+    console.log('trace 3');
       /* @test */
       assert.equal(title, "セキュリテ - インパクト投資プラットフォーム");
     });
 
     await takeScreentJust(driver, '001_top', 'png');
 
+    console.log('trace 4');
   });
   
   it("トップページ ログインページに遷移", async () => {
