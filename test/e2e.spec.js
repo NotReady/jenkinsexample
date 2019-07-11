@@ -41,6 +41,7 @@ describe("デモ", () => {
         var options = new chrome.Options();
         options.addArguments('headless');
         options.addArguments('no-sandbox');     
+        options.addArguments('disable-gpu');
           
         driver = new Builder()
         .forBrowser('chrome')
