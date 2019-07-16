@@ -42,7 +42,7 @@ describe("デモ", () => {
         options.addArguments('headless');
         options.addArguments('no-sandbox');     
         options.addArguments('disable-gpu');
-        options.setChromeBinaryPath("/usr/bin/google-chrome");
+        options.setChromeBinaryPath("/usr/bin");
           
         driver = new Builder()
         .forBrowser('chrome')
