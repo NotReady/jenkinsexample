@@ -42,7 +42,8 @@ describe("デモ", () => {
         options.addArguments('headless');
         options.addArguments('no-sandbox');     
         options.addArguments('disable-gpu');
-        options.setChromeBinaryPath("/usr/bin");
+        options.addArguments('disable-infobars');
+        options.setChromeBinaryPath("/var/jenkins_home/bin/google-chrome");
           
         driver = new Builder()
         .forBrowser('chrome')
