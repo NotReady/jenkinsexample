@@ -42,6 +42,7 @@ describe("デモ", () => {
         options.addArguments('headless');
         options.addArguments('no-sandbox');     
         options.addArguments('disable-gpu');
+        options.setChromeBinaryPath("/usr/bin/google-chrine");
           
         driver = new Builder()
         .forBrowser('chrome')
