@@ -66,7 +66,7 @@ describe("デモ", () => {
     );
 
     // トップページのロード待ち
-    await driver.wait(until.titleContains('セキュリテ'), 20000);
+    await driver.wait(until.titleContains('ログイン - Yahoo! JAPAN'), 10000);
 
     console.log('trace 2');
     
