@@ -62,8 +62,7 @@ describe("デモ", () => {
     console.log('trace 1');
     // テスト対象のページへアクセス
     await driver.get(
-//        "https://www.securite.jp/"
-          "https://yahoo.co.jp"
+        "https://yahoo.co.jp"
     );
 
     // トップページのロード待ち
