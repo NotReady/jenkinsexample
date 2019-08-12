@@ -62,11 +62,12 @@ describe("デモ", () => {
     console.log('trace 1');
     // テスト対象のページへアクセス
     await driver.get(
-        "https://www.securite.jp/"
+//        "https://www.securite.jp/"
+          "https://yahoo.co.jp"
     );
 
     // トップページのロード待ち
-    await driver.wait(until.titleContains('セキュリテ'), 10000);
+    await driver.wait(until.titleContains('セキュリテ'), 20000);
 
     console.log('trace 2');
     
