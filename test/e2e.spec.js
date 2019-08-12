@@ -89,7 +89,7 @@ describe("デモ", () => {
     await driver.findElement(By.linkText('ログイン')).click();
     await driver.wait(until.titleContains('ログイン'), 10000);
     await driver.getTitle().then(function (title) {
-      assert.equal(title, "ログイン｜セキュリテ");
+      assert.equal(title, "ログイン - Yahoo! JAPAN");
     });
     await takeScreentJust(driver, '002_login', 'png');
   });
