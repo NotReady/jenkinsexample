@@ -1,4 +1,4 @@
-job('NodeJS Job') {
+job('NodeJS Job2') {
     scm {
         git('https://github.com/NotReady/jenkinsexample.git') {  node ->
             node / gitConfigName('DSL User')
@@ -9,7 +9,7 @@ job('NodeJS Job') {
         scm('H/5 * * * *')
     }
     wrappers {
-        nodejs('nodejs_v12')
+        nodejs('nodejs_V12')
     }
     steps {
         shell("npm install")
