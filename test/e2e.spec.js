@@ -43,7 +43,7 @@ describe("デモ", () => {
         options.addArguments('no-sandbox');     
         options.addArguments('disable-gpu');
         options.addArguments('disable-infobars');
-        options.setChromeBinaryPath("/var/jenkins_home/bin/google-chrome");
+        options.setChromeBinaryPath("/bin/google-chrome");
           
         driver = new Builder()
         .forBrowser('chrome')
@@ -62,11 +62,11 @@ describe("デモ", () => {
     console.log('trace 1');
     // テスト対象のページへアクセス
     await driver.get(
-        "https://yahoo.co.jp"
+        "https://www.securite.jp"
     );
 
     // トップページのロード待ち
-    await driver.wait(until.titleContains('ログイン - Yahoo! JAPAN'), 10000);
+    //await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
 
     console.log('trace 2');
     
@@ -89,7 +89,7 @@ describe("デモ", () => {
     await driver.findElement(By.linkText('ログイン')).click();
     await driver.wait(until.titleContains('ログイン'), 10000);
     await driver.getTitle().then(function (title) {
-      assert.equal(title, "ログイン - Yahoo! JAPAN");
+      assert.equal(title, "ログイン｜セキュリテ");
     });
     await takeScreentJust(driver, '002_login', 'png');
   });
