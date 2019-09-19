@@ -103,13 +103,11 @@ describe("デモ", () => {
         const nameFile = "resemblejstest";//path.basename(__filename, path.extname(__filename));
         
         const nameDirsHistory = fs.readdirSync(parentDir);
-        global.nameFilePrevious = parentDir + 
-            [nameDirsHistory.length-1] + "/" + nameFile + ".png";
+        global.nameFilePrevious = parentDir + nameDirsHistory[nameDirsHistory.length-1] + "/" + nameFile + ".png";
         
-        global.nameNewDir = parentDir + date.format(now, 'YYYY_MM_DD_HH:mm:ss').toString() + "/";
+        global.nameNewDir = parentDir + date.format(now, 'YYYYMMDDHHmmss').toString() + "/";
         fs.mkdirsSync(nameNewDir);
         global.nameFileNew = nameNewDir + nameFile + ".png";
-        
   });
 
   afterAll(() => {
