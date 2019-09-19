@@ -1,19 +1,20 @@
 const date = require("date-and-time");
 const fs = require("fs-extra");
 const path = require("path");
-const path = require("chromedriver").path;
+const pathOfChromeDriver = require("chromedriver").path;
+// expect使うなら不要↓
 const assert = require("assert");
 const chrome = require("selenium-webdriver/chrome");
 const { promisify } = require("util");
 const webdriver = require("selenium-webdriver");
 const { Builder, By, until } = webdriver;
-const service = new chrome.ServiceBuilder(path).build();
+const service = new chrome.ServiceBuilder(pathOfChromeDriver).build();
 chrome.setDefaultService(service);
 
 let driver;
 
 jest.setTimeout(60000);
-// console.log(path);
+// console.log(pathOfChromeDriver);
 
 // コンテンツサイズにウインドウを合わせてキャプチャをとる
 async function takeScreentJust(driver, fileName, ext)
