@@ -1,6 +1,7 @@
 const date = require("date-and-time");
 const fs = require("fs-extra");
 const path = require("path");
+const resemble = require("resemblejs");
 const pathOfChromeDriver = require("chromedriver").path;
 // expect使うなら不要↓
 const assert = require("assert");
