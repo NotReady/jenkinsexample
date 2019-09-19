@@ -23,32 +23,50 @@ async function takeScreentJust(driver, fileName, ext)
 
   let contentWidth = await driver.executeScript("return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);");
   let contentHeight = await driver.executeScript("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);");
-
-  console.log(timestamp() + ": takeScreenJust trace1");
-
+  
   await driver.manage().window().setRect({
     width: contentWidth,
     height: contentHeight,
     // width: 800, 
     // height: 600,
   });
-  
-  console.log(timestamp() + ": takeScreenJust trace2");
+
+  console.log(timestamp() + ": takeScreenJust pagesized window");
 
   let base64 = await driver.takeScreenshot();
 
-  console.log(timestamp() + ": takeScreenJust trace2-1");
+  console.log(timestamp() + ": takeScreenJust taked screenshot");
 
   let buffer = Buffer.from(base64, 'base64');
   //await promisify(fs.writeFile)(fileName + "." + ext, buffer);
   await promisify(fs.writeFile)(nameFileNew, buffer);
-  
-  console.log(timestamp() + ": takeScreenJust trace3");
+
+  console.log(timestamp() + ": takeScreenJust flushed screenshot");
 
   await driver.manage().window().setRect({
     width: 1920,
     height: 1080,
   });
+
+  console.log(timestamp() + ": takeScreenJust defaultsized window");
+  
+  // 最新と一つ前のスクショを取得
+  const imageBefore = fs.readFileSync(nameFilePrevious);
+  const imageAfter  = fs.readFileSync(nameFileNew);
+
+  console.log(timestamp() + ": takeScreenJust buffered screenshot");
+  
+  // 比較
+  let misMatchPercentage = 0;
+  resemble(imageAfter).compareTo(imageBefore)
+      .ignoreColors()
+      .onComplete(function (data){
+        fs.writeFileSync(nameNewDir + "diff.png", data.getBuffer());
+        console.log(data);
+        misMatchPercentage = data.misMatchPercentage;
+      });
+
+  expect(misMatchPercentage).toBeLessThan(1);
   
   console.log(timestamp() + ": takeScreenJust Ended");
 }
@@ -85,9 +103,10 @@ describe("デモ", () => {
         const nameFile = "resemblejstest";//path.basename(__filename, path.extname(__filename));
         
         const nameDirsHistory = fs.readdirSync(parentDir);
-        global.nameFilePrevious = parentDir + nameDirsHistory[nameDirsHistory.length-1] + "/" + nameFile + ".png";
+        global.nameFilePrevious = parentDir + 
+            [nameDirsHistory.length-1] + "/" + nameFile + ".png";
         
-        const nameNewDir = parentDir + date.format(now, 'YYYY_MM_DD_HH:mm:ss').toString() + "/";
+        global.nameNewDir = parentDir + date.format(now, 'YYYY_MM_DD_HH:mm:ss').toString() + "/";
         fs.mkdirsSync(nameNewDir);
         global.nameFileNew = nameNewDir + nameFile + ".png";
         
