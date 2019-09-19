@@ -123,4 +123,14 @@ describe("デモ", () => {
     assert.equal(errorMsg, "ログインIDまたはパスワードを見直してください。");
   });
 
+  it("ログインページ ログイン成功", async () => {
+    // ログインフォームを入力してログイン
+    await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys("msohashi");
+    await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("YaIkani13");
+    await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
+    
+    await takeScreentJust(driver, '004_loginsuccess', 'png');
+
+  });
+  
 });
