@@ -148,27 +148,28 @@ describe("デモ", () => {
     console.log(timestamp() + ": trace4");
   });
   
-  // it("トップページ ログインページに遷移", async () => {
-  //
-  //   await driver.findElement(By.linkText('ログイン')).click();
-  //   await driver.wait(until.titleContains('ログイン'), 10000);
-  //  
-  //   /* @test title */ 
-  //   await driver.getTitle().then(function (title) {
-  //     assert.equal(title, "ログイン｜セキュリテ");
-  //   });
-  //   await takeScreentJust(driver, '002_login', 'png');
-  // });
-  //
-  // it("ログインページ ブランクフォームエラー", async () => {
-  //   // フォームをブランクで送信
-  //   await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
-  //   await takeScreentJust(driver, '003_loginfail', 'png');
-  //  
-  //   const errorMsg = await driver.findElement(By.className("error_msg")).getText();
-  //   /* @test invalidate message */
-  //   assert.equal(errorMsg, "ログインIDまたはパスワードを見直してください。");
-  // });
+  it("トップページ ログインページに遷移", async () => {
+
+    await driver.findElement(By.linkText('ログイン')).click();
+    await driver.wait(until.titleContains('ログイン'), 10000);
+
+    /* @test title */ 
+    await driver.getTitle().then(function (title) {
+      assert.equal(title, "ログイン｜セキュリテ");
+    });
+    await takeScreentJust(driver, '002_login', 'png');
+  });
+
+  it("ログインページ ブランクフォームエラー", async () => {
+    // フォームをブランクで送信
+    await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
+    await takeScreentJust(driver, '003_loginfail', 'png');
+
+    const errorMsg = await driver.findElement(By.className("error_msg")).getText();
+    /* @test invalidate message */
+    assert.equal(errorMsg, "ログインIDまたはパスワードを見直してください。");
+  });
+  
   //
   // it("ログインページ ログイン成功", async () => {
   //   // ログインフォームを入力してログイン
