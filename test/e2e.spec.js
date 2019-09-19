@@ -17,7 +17,7 @@ jest.setTimeout(60000);
 // コンテンツサイズにウインドウを合わせてキャプチャをとる
 async function takeScreentJust(driver, fileName, ext)
 {
-  console.log(timestamp() + ": takeScreenJust Started");
+  putLog("takeScreenJust Started");
 
   let contentWidth = await driver.executeScript("return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);");
   let contentHeight = await driver.executeScript("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);");
@@ -25,15 +25,13 @@ async function takeScreentJust(driver, fileName, ext)
   await driver.manage().window().setRect({
     width: contentWidth,
     height: contentHeight,
-    // width: 800, 
-    // height: 600,
   });
 
-  console.log(timestamp() + ": takeScreenJust pagesized window");
+  putLog("takeScreenJust pagesized window");
 
   let base64 = await driver.takeScreenshot();
 
-  console.log(timestamp() + ": takeScreenJust taked screenshot");
+  putLog("takeScreenJust taked screenshot");
 
   let buffer = Buffer.from(base64, 'base64');
   //await promisify(fs.writeFile)(fileName + "." + ext, buffer);
@@ -41,14 +39,14 @@ async function takeScreentJust(driver, fileName, ext)
   const pathFileNameDiff = nameNewDiffDir + fileName + "." + ext;
   await promisify(fs.writeFile)(pathFileNameNewer, buffer); // 保存
 
-  console.log(timestamp() + ": takeScreenJust flushed screenshot");
+  putLog("takeScreenJust flushed screenshot");
 
   await driver.manage().window().setRect({
     width: 1920,
     height: 1080,
   });
 
-  console.log(timestamp() + ": takeScreenJust defaultsized window");
+  putLog("takeScreenJust defaultsized window");
 
   const pathFileNamePrevious = namePreviousDir + fileName + "." + ext;
   
@@ -56,7 +54,7 @@ async function takeScreentJust(driver, fileName, ext)
     fs.statSync(pathFileNamePrevious);
   }catch (err) {
     if( err.code === 'ENOENT'){
-      console.log(timestamp() + ": " + pathFileNamePrevious + "is not found skip resemble");
+      putLog("" + pathFileNamePrevious + "is not found skip resemble");
       return;
     }
   }
@@ -65,7 +63,7 @@ async function takeScreentJust(driver, fileName, ext)
   const imageBefore = fs.readFileSync(pathFileNamePrevious);
   const imageAfter  = fs.readFileSync(pathFileNameNewer);
 
-  console.log(timestamp() + ": takeScreenJust buffered screenshot");
+  putLog("takeScreenJust buffered screenshot");
 
   // 比較
   var misMatchPercentage = 0;
@@ -80,7 +78,11 @@ async function takeScreentJust(driver, fileName, ext)
   console.log("misMatchPercentage: " + misMatchPercentage);
   expect(misMatchPercentage).toBeLessThan(1);
   
-  console.log(timestamp() + ": takeScreenJust Ended");
+  putLog("takeScreenJust Ended");
+}
+
+function putLog(logStr){
+  console.log(timestamp() + ": " + logStr);
 }
 
 function timestamp(){
@@ -128,7 +130,7 @@ describe("デモ", () => {
   it("トップページ ページタイトル", async () => {
 
 
-    console.log(timestamp() + ": trace1");
+    putLog("trace1");
 
     // テスト対象のページへアクセス
     await driver.get("https://www.securite.jp");
@@ -136,11 +138,11 @@ describe("デモ", () => {
     // トップページのロード待ち
     //await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
 
-    console.log(timestamp() + ": trace2");
+    putLog("trace2");
     
     await driver.getTitle().then(function (title) {
       
-      console.log(timestamp() + ": trace3");
+      putLog("trace3");
       // @test title is match?
       // assert.equal(title, "セキュリテ - インパクト投資プラットフォーム");
       expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
@@ -148,7 +150,7 @@ describe("デモ", () => {
 
     await takeScreentJust(driver, '001_top', 'png');
 
-    console.log(timestamp() + ": trace4");
+    putLog("trace4");
   });
   
   it("トップページ ログインページに遷移", async () => {
