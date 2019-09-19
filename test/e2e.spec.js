@@ -41,7 +41,7 @@ async function takeScreentJust(driver, fileName, ext)
   let buffer = Buffer.from(base64, 'base64');
   //await promisify(fs.writeFile)(fileName + "." + ext, buffer);
   const pathFileNameNewer = nameNewDir + fileName + "." + ext;
-  const pathFileNameDiff = nameNewDir + "diff/" + fileName + "." + ext;
+  const pathFileNameDiff = nameNewDiffDir + fileName + "." + ext;
   const pathFileNamePrevious = namePreviousDir + fileName + "." + ext;
   await promisify(fs.writeFile)(pathFileNameNewer, buffer); // 保存
 
@@ -110,7 +110,11 @@ describe("デモ", () => {
         global.namePreviousDir = parentDir + nameDirsHistory[nameDirsHistory.length-1] + "/";
         global.nameFilePrevious = namePreviousDir + nameFile + ".png";
         global.nameNewDir = parentDir + date.format(now, 'YYYYMMDDHHmmss').toString() + "/";
+        global.nameNewDiffDir = nameNewDir + "diff/";
+    
         fs.mkdirsSync(nameNewDir);
+        fs.mkdirsSync(nameNewDiffDir);
+    
         global.nameFileNew = nameNewDir + nameFile + ".png";
   });
 
