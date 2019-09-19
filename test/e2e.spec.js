@@ -61,8 +61,8 @@ async function takeScreentJust(driver, fileName, ext)
   console.log(timestamp() + ": takeScreenJust buffered screenshot");
   
   // 比較
-  global.misMatchPercentage = 0;
-  resemble(imageAfter).compareTo(imageBefore)
+  var misMatchPercentage = 0;
+  await resemble(imageAfter).compareTo(imageBefore)
       .ignoreColors()
       .onComplete(function (data){
         fs.writeFileSync(pathFileNameDiff, data.getBuffer());
