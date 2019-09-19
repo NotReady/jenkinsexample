@@ -67,7 +67,7 @@ async function takeScreentJust(driver, fileName, ext)
       .onComplete(function (data){
         fs.writeFileSync(pathFileNameDiff, data.getBuffer());
         console.log(data);
-        misMatchPercentage = data.misMatchPercentage;
+        misMatchPercentage = data.rawMisMatchPercentage;
       });
 
   console.log("misMatchPercentage: " + misMatchPercentage);
