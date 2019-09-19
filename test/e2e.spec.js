@@ -42,7 +42,6 @@ async function takeScreentJust(driver, fileName, ext)
   //await promisify(fs.writeFile)(fileName + "." + ext, buffer);
   const pathFileNameNewer = nameNewDir + fileName + "." + ext;
   const pathFileNameDiff = nameNewDiffDir + fileName + "." + ext;
-  const pathFileNamePrevious = namePreviousDir + fileName + "." + ext;
   await promisify(fs.writeFile)(pathFileNameNewer, buffer); // 保存
 
   console.log(timestamp() + ": takeScreenJust flushed screenshot");
@@ -53,25 +52,29 @@ async function takeScreentJust(driver, fileName, ext)
   });
 
   console.log(timestamp() + ": takeScreenJust defaultsized window");
-  
-  // 最新と一つ前のスクショを取得
-  const imageBefore = fs.readFileSync(pathFileNamePrevious);
-  const imageAfter  = fs.readFileSync(pathFileNameNewer);
 
-  console.log(timestamp() + ": takeScreenJust buffered screenshot");
+  const pathFileNamePrevious = namePreviousDir + fileName + "." + ext;
   
-  // 比較
-  var misMatchPercentage = 0;
-  await resemble(imageAfter).compareTo(imageBefore)
-      .ignoreColors()
-      .onComplete(function (data){
-        fs.writeFileSync(pathFileNameDiff, data.getBuffer());
-        console.log(data);
-        misMatchPercentage = data.rawMisMatchPercentage;
-      });
+  if( fs.existSync(pathFileNamePrevious) == true ){
+    // 最新と一つ前のスクショを取得
+    const imageBefore = fs.readFileSync(pathFileNamePrevious);
+    const imageAfter  = fs.readFileSync(pathFileNameNewer);
 
-  console.log("misMatchPercentage: " + misMatchPercentage);
-  expect(misMatchPercentage).toBeLessThan(1);
+    console.log(timestamp() + ": takeScreenJust buffered screenshot");
+
+    // 比較
+    var misMatchPercentage = 0;
+    await resemble(imageAfter).compareTo(imageBefore)
+        .ignoreColors()
+        .onComplete(function (data){
+          fs.writeFileSync(pathFileNameDiff, data.getBuffer());
+          console.log(data);
+          misMatchPercentage = data.rawMisMatchPercentage;
+        });
+
+    console.log("misMatchPercentage: " + misMatchPercentage);
+    expect(misMatchPercentage).toBeLessThan(1); 
+  }
   
   console.log(timestamp() + ": takeScreenJust Ended");
 }
