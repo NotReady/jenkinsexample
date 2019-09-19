@@ -16,23 +16,40 @@ console.log(path);
 // コンテンツサイズにウインドウを合わせてキャプチャをとる
 async function takeScreentJust(driver, fileName, ext)
 {
+  console.log(timestamp() + ": takeScreenJust Started");
+
   let contentWidth = await driver.executeScript("return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);");
   let contentHeight = await driver.executeScript("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);");
+
+  console.log(timestamp() + ": takeScreenJust trace1");
 
   await driver.manage().window().setRect({
     width: contentWidth,
     height: contentHeight,
   });
   
+  console.log(timestamp() + ": takeScreenJust trace2");
+
   let base64 = await driver.takeScreenshot();
+
+  console.log(timestamp() + ": takeScreenJust trace2-1");
+
   let buffer = Buffer.from(base64, 'base64');
   await promisify(fs.writeFile)(fileName + "." + ext, buffer);
+
+  console.log(timestamp() + ": takeScreenJust trace3");
 
   await driver.manage().window().setRect({
     width: 1920,
     height: 1080,
   });
   
+  console.log(timestamp() + ": takeScreenJust Ended");
+}
+
+function timestamp(){
+  var dt = new Date();
+  return dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 }
 
 describe("デモ", () => {
@@ -59,7 +76,8 @@ describe("デモ", () => {
   it("トップページ ページタイトル", async () => {
 
 
-    console.log('trace 1');
+    console.log(timestamp() + ": trace1");
+
     // テスト対象のページへアクセス
     await driver.get(
         "https://www.securite.jp"
@@ -68,20 +86,18 @@ describe("デモ", () => {
     // トップページのロード待ち
     //await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
 
-    console.log('trace 2');
+    console.log(timestamp() + ": trace2");
     
-    /*
     await driver.getTitle().then(function (title) {
       
-    console.log('trace 3');
+      console.log(timestamp() + ": trace3");
       // @test title is match?
       assert.equal(title, "セキュリテ - インパクト投資プラットフォーム");
     });
-    */
 
     await takeScreentJust(driver, '001_top', 'png');
 
-    console.log('trace 4');
+    console.log(timestamp() + ": trace4");
   });
   
   it("トップページ ログインページに遷移", async () => {
