@@ -1,10 +1,7 @@
 const date = require("date-and-time");
 const fs = require("fs-extra");
-const path = require("path");
 const resemble = require("resemblejs");
 const pathOfChromeDriver = require("chromedriver").path;
-// expect使うなら不要↓
-const assert = require("assert");
 const chrome = require("selenium-webdriver/chrome");
 const { promisify } = require("util");
 const webdriver = require("selenium-webdriver");
@@ -57,31 +54,31 @@ async function takeScreentJust(driver, fileName, ext)
   
   try {
     fs.statSync(pathFileNamePrevious);
-
-    // 最新と一つ前のスクショを取得
-    const imageBefore = fs.readFileSync(pathFileNamePrevious);
-    const imageAfter  = fs.readFileSync(pathFileNameNewer);
-
-    console.log(timestamp() + ": takeScreenJust buffered screenshot");
-
-    // 比較
-    var misMatchPercentage = 0;
-    await resemble(imageAfter).compareTo(imageBefore)
-        .ignoreColors()
-        .onComplete(function (data){
-          fs.writeFileSync(pathFileNameDiff, data.getBuffer());
-          console.log(data);
-          misMatchPercentage = data.rawMisMatchPercentage;
-        });
-
-    console.log("misMatchPercentage: " + misMatchPercentage);
-    expect(misMatchPercentage).toBeLessThan(1);
-
   }catch (err) {
-    if( err.code !== 'ENOENT'){
-      console.log("err:" + err.message);
+    if( err.code === 'ENOENT'){
+      console.log(timestamp() + ": " + pathFileNamePrevious + "is not found skip resemble");
+      return;
     }
   }
+
+  // 最新と一つ前のスクショを取得
+  const imageBefore = fs.readFileSync(pathFileNamePrevious);
+  const imageAfter  = fs.readFileSync(pathFileNameNewer);
+
+  console.log(timestamp() + ": takeScreenJust buffered screenshot");
+
+  // 比較
+  var misMatchPercentage = 0;
+  await resemble(imageAfter).compareTo(imageBefore)
+      .ignoreColors()
+      .onComplete(function (data){
+        fs.writeFileSync(pathFileNameDiff, data.getBuffer());
+        console.log(data);
+        misMatchPercentage = data.rawMisMatchPercentage;
+      });
+
+  console.log("misMatchPercentage: " + misMatchPercentage);
+  expect(misMatchPercentage).toBeLessThan(1);
   
   console.log(timestamp() + ": takeScreenJust Ended");
 }
@@ -115,10 +112,8 @@ describe("デモ", () => {
         // スクショ用のdir作成
         global.now = new Date();
         const parentDir = "screen_shot/";
-        const nameFile = "resemblejstest";//path.basename(__filename, path.extname(__filename));
         const nameDirsHistory = fs.readdirSync(parentDir);
         global.namePreviousDir = parentDir + nameDirsHistory[nameDirsHistory.length-1] + "/";
-        global.nameFilePrevious = namePreviousDir + nameFile + ".png";
         global.nameNewDir = parentDir + date.format(now, 'YYYYMMDDHHmmss').toString() + "/";
         global.nameNewDiffDir = nameNewDir + "diff/";
     
@@ -165,7 +160,7 @@ describe("デモ", () => {
 
     /* @test title */ 
     await driver.getTitle().then(function (title) {
-      assert.equal(title, "ログイン｜セキュリテ");
+      expect(title).toBe("ログイン｜セキュリテ");
     });
     await takeScreentJust(driver, '002_login', 'png');
   });
@@ -177,32 +172,32 @@ describe("デモ", () => {
 
     const errorMsg = await driver.findElement(By.className("error_msg")).getText();
     /* @test invalidate message */
-    assert.equal(errorMsg, "ログインIDまたはパスワードを見直してください。");
+    expect(errorMsg).toBe("ログインIDまたはパスワードを見直してください。");
   });
   
-  //
-  // it("ログインページ ログイン成功", async () => {
-  //   // ログインフォームを入力してログイン
-  //   await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys("msohashi");
-  //   await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("YaIkani13");
-  //   await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
-  //  
-  //   /* @test title */
-  //   await driver.getTitle().then(function (title) {
-  //     assert.equal(title, "マイページ｜セキュリテ");
-  //   });
-  //   await takeScreentJust(driver, '004_loginsuccess', 'png');
-  // });
-  //
-  // it("マイページ マイアカウント遷移", async () => {
-  //   // マイアカウントリンクをクリックして、マイアカウントページを表示する
-  //   await driver.findElement(By.xpath("//a[contains(text(), 'マイアカウント')]")).click();
-  //
-  //   /* @test title */
-  //   await driver.getTitle().then(function (title) {
-  //     assert.equal(title, "マイアカウント｜セキュリテ");
-  //   });
-  //   await takeScreentJust(driver, '005_myaccount', 'png');
-  // });
+
+  it("ログインページ ログイン成功", async () => {
+    // ログインフォームを入力してログイン
+    await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys("msohashi");
+    await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("YaIkani13");
+    await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
+
+    /* @test title */
+    await driver.getTitle().then(function (title) {
+      expect(title).toBe("マイページ｜セキュリテ");
+    });
+    await takeScreentJust(driver, '004_loginsuccess', 'png');
+  });
+
+  it("マイページ マイアカウント遷移", async () => {
+    // マイアカウントリンクをクリックして、マイアカウントページを表示する
+    await driver.findElement(By.xpath("//a[contains(text(), 'マイアカウント')]")).click();
+
+    /* @test title */
+    await driver.getTitle().then(function (title) {
+      expect(title).toBe("マイアカウント｜セキュリテ");
+    });
+    await takeScreentJust(driver, '005_myaccount', 'png');
+  });
   
 });
