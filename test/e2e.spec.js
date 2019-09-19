@@ -10,8 +10,8 @@ chrome.setDefaultService(service);
 
 let driver;
 
-jest.setTimeout(20000);
-console.log(path);
+jest.setTimeout(60000);
+// console.log(path);
 
 // コンテンツサイズにウインドウを合わせてキャプチャをとる
 async function takeScreentJust(driver, fileName, ext)
@@ -26,6 +26,8 @@ async function takeScreentJust(driver, fileName, ext)
   await driver.manage().window().setRect({
     width: contentWidth,
     height: contentHeight,
+    // width: 800, 
+    // height: 600,
   });
   
   console.log(timestamp() + ": takeScreenJust trace2");
@@ -60,6 +62,7 @@ describe("デモ", () => {
         options.addArguments('no-sandbox');     
         options.addArguments('disable-gpu');
         options.addArguments('disable-infobars');
+        options.addArguments('window-size=1920,1080');
         options.setChromeBinaryPath("/bin/google-chrome");
           
         driver = new Builder()
@@ -84,7 +87,7 @@ describe("デモ", () => {
     );
 
     // トップページのロード待ち
-    //await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
+    await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
 
     console.log(timestamp() + ": trace2");
     
