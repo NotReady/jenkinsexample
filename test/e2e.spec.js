@@ -71,18 +71,18 @@ async function takeScreentJust(driver, fileName, ext)
       .ignoreColors()
       .onComplete(function (data){
         fs.writeFileSync(pathFileNameDiff, data.getBuffer());
-        console.log(data);
+        putLog(data);
         misMatchPercentage = data.rawMisMatchPercentage;
       });
 
-  console.log("misMatchPercentage: " + misMatchPercentage);
+  putLog("misMatchPercentage: " + misMatchPercentage);
   expect(misMatchPercentage).toBeLessThan(1);
   
   putLog("takeScreenJust Ended");
 }
 
 function putLog(logStr){
-  console.log(timestamp() + ": " + logStr);
+  //console.log(timestamp() + ": " + logStr);
 }
 
 function timestamp(){
