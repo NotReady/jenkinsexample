@@ -55,7 +55,9 @@ async function takeScreentJust(driver, fileName, ext)
 
   const pathFileNamePrevious = namePreviousDir + fileName + "." + ext;
   
-  if( fs.existSync(pathFileNamePrevious) == true ){
+  try {
+    fs.statSync(pathFileNamePrevious);
+
     // 最新と一つ前のスクショを取得
     const imageBefore = fs.readFileSync(pathFileNamePrevious);
     const imageAfter  = fs.readFileSync(pathFileNameNewer);
@@ -73,7 +75,12 @@ async function takeScreentJust(driver, fileName, ext)
         });
 
     console.log("misMatchPercentage: " + misMatchPercentage);
-    expect(misMatchPercentage).toBeLessThan(1); 
+    expect(misMatchPercentage).toBeLessThan(1);
+
+  }catch (err) {
+    if( err.code !== 'ENOENT'){
+      console.log("err:" + err.message);
+    }
   }
   
   console.log(timestamp() + ": takeScreenJust Ended");
