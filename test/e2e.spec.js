@@ -42,7 +42,7 @@ async function takeScreentJust(driver, fileName, ext)
   //await promisify(fs.writeFile)(fileName + "." + ext, buffer);
   const pathFileNameNewer = nameNewDir + fileName + "." + ext;
   const pathFileNameDiff = nameNewDir + "diff/" + fileName + "." + ext;
-  const pathFileNamePrevious = namePreviousDirDir + fileName + "." + ext;
+  const pathFileNamePrevious = namePreviousDir + fileName + "." + ext;
   await promisify(fs.writeFile)(pathFileNameNewer, buffer); // 保存
 
   console.log(timestamp() + ": takeScreenJust flushed screenshot");
