@@ -40,7 +40,10 @@ async function takeScreentJust(driver, fileName, ext)
 
   let buffer = Buffer.from(base64, 'base64');
   //await promisify(fs.writeFile)(fileName + "." + ext, buffer);
-  await promisify(fs.writeFile)(nameFileNew, buffer);
+  const pathFileNameNewer = nameNewDir + fileName + "." + ext;
+  const pathFileNameDiff = nameNewDir + "diff/" + fileName + "." + ext;
+  const pathFileNamePrevious = namePreviousDirDir + fileName + "." + ext;
+  await promisify(fs.writeFile)(pathFileNameNewer, buffer); // 保存
 
   console.log(timestamp() + ": takeScreenJust flushed screenshot");
 
@@ -52,8 +55,8 @@ async function takeScreentJust(driver, fileName, ext)
   console.log(timestamp() + ": takeScreenJust defaultsized window");
   
   // 最新と一つ前のスクショを取得
-  const imageBefore = fs.readFileSync(nameFilePrevious);
-  const imageAfter  = fs.readFileSync(nameFileNew);
+  const imageBefore = fs.readFileSync(pathFileNamePrevious);
+  const imageAfter  = fs.readFileSync(pathFileNameNewer);
 
   console.log(timestamp() + ": takeScreenJust buffered screenshot");
   
@@ -62,11 +65,12 @@ async function takeScreentJust(driver, fileName, ext)
   resemble(imageAfter).compareTo(imageBefore)
       .ignoreColors()
       .onComplete(function (data){
-        fs.writeFileSync(nameNewDir + "diff.png", data.getBuffer());
+        fs.writeFileSync(pathFileNameDiff, data.getBuffer());
         console.log(data);
         misMatchPercentage = data.misMatchPercentage;
       });
 
+  console.log("misMatchPercentage: " + misMatchPercentage);
   expect(misMatchPercentage).toBeLessThan(1);
   
   console.log(timestamp() + ": takeScreenJust Ended");
@@ -102,10 +106,9 @@ describe("デモ", () => {
         global.now = new Date();
         const parentDir = "screen_shot/";
         const nameFile = "resemblejstest";//path.basename(__filename, path.extname(__filename));
-        
         const nameDirsHistory = fs.readdirSync(parentDir);
-        global.nameFilePrevious = parentDir + nameDirsHistory[nameDirsHistory.length-1] + "/" + nameFile + ".png";
-        
+        global.namePreviousDir = parentDir + nameDirsHistory[nameDirsHistory.length-1] + "/";
+        global.nameFilePrevious = namePreviousDir + nameFile + ".png";
         global.nameNewDir = parentDir + date.format(now, 'YYYYMMDDHHmmss').toString() + "/";
         fs.mkdirsSync(nameNewDir);
         global.nameFileNew = nameNewDir + nameFile + ".png";
@@ -124,7 +127,7 @@ describe("デモ", () => {
     await driver.get("https://www.securite.jp");
 
     // トップページのロード待ち
-    await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
+    //await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
 
     console.log(timestamp() + ": trace2");
     
