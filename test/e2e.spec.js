@@ -1,8 +1,10 @@
-const path = require('chromedriver').path;
-const fs = require('fs');
+const date = require("date-and-time");
+const fs = require("fs-extra");
+const path = require("path");
+const path = require("chromedriver").path;
 const assert = require("assert");
-const chrome = require('selenium-webdriver/chrome');
-const { promisify } = require('util');
+const chrome = require("selenium-webdriver/chrome");
+const { promisify } = require("util");
 const webdriver = require("selenium-webdriver");
 const { Builder, By, until } = webdriver;
 const service = new chrome.ServiceBuilder(path).build();
@@ -37,8 +39,9 @@ async function takeScreentJust(driver, fileName, ext)
   console.log(timestamp() + ": takeScreenJust trace2-1");
 
   let buffer = Buffer.from(base64, 'base64');
-  await promisify(fs.writeFile)(fileName + "." + ext, buffer);
-
+  //await promisify(fs.writeFile)(fileName + "." + ext, buffer);
+  await promisify(fs.writeFile)(nameFileNew, buffer);
+  
   console.log(timestamp() + ": takeScreenJust trace3");
 
   await driver.manage().window().setRect({
@@ -50,13 +53,16 @@ async function takeScreentJust(driver, fileName, ext)
 }
 
 function timestamp(){
-  var dt = new Date();
+  const  dt = new Date();
   return dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+  // return (new Date()).toFormat("YYYYMMDDHH24MISS");
 }
 
 describe("デモ", () => {
   
   beforeAll(() => {
+    
+        // chromeのヘッドレスオプション
         var options = new chrome.Options();
         options.addArguments('headless');
         options.addArguments('no-sandbox');     
@@ -65,11 +71,25 @@ describe("デモ", () => {
         options.addArguments('window-size=1920,1080');
         options.setChromeBinaryPath("/bin/google-chrome");
           
+        // オプションを設定してchromewoを起動
         driver = new Builder()
         .forBrowser('chrome')
         .withCapabilities(webdriver.Capabilities.chrome())
         .setChromeOptions(options)
         .build();
+        
+        // スクショ用のdir作成
+        global.now = new Date();
+        const parentDir = "screen_shot/";
+        const nameFile = "resemblejstest";//path.basename(__filename, path.extname(__filename));
+        
+        const nameDirsHistory = fs.readdirSync(parentDir);
+        global.nameFilePrevious = parentDir + nameDirsHistory[nameDirsHistory.length-1] + "/" + nameFile + ".png";
+        
+        const nameNewDir = parentDir + date.format(now, 'YYYY_MM_DD_HH:mm:ss').toString() + "/";
+        fs.mkdirsSync(nameNewDir);
+        global.nameFileNew = nameNewDir + nameFile + ".png";
+        
   });
 
   afterAll(() => {
@@ -82,9 +102,7 @@ describe("デモ", () => {
     console.log(timestamp() + ": trace1");
 
     // テスト対象のページへアクセス
-    await driver.get(
-        "https://www.securite.jp"
-    );
+    await driver.get("https://www.securite.jp");
 
     // トップページのロード待ち
     await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
@@ -104,50 +122,50 @@ describe("デモ", () => {
     console.log(timestamp() + ": trace4");
   });
   
-  it("トップページ ログインページに遷移", async () => {
-
-    await driver.findElement(By.linkText('ログイン')).click();
-    await driver.wait(until.titleContains('ログイン'), 10000);
-    
-    /* @test title */ 
-    await driver.getTitle().then(function (title) {
-      assert.equal(title, "ログイン｜セキュリテ");
-    });
-    await takeScreentJust(driver, '002_login', 'png');
-  });
-  
-  it("ログインページ ブランクフォームエラー", async () => {
-    // フォームをブランクで送信
-    await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
-    await takeScreentJust(driver, '003_loginfail', 'png');
-    
-    const errorMsg = await driver.findElement(By.className("error_msg")).getText();
-    /* @test invalidate message */
-    assert.equal(errorMsg, "ログインIDまたはパスワードを見直してください。");
-  });
-
-  it("ログインページ ログイン成功", async () => {
-    // ログインフォームを入力してログイン
-    await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys("msohashi");
-    await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("YaIkani13");
-    await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
-    
-    /* @test title */
-    await driver.getTitle().then(function (title) {
-      assert.equal(title, "マイページ｜セキュリテ");
-    });
-    await takeScreentJust(driver, '004_loginsuccess', 'png');
-  });
-
-  it("マイページ マイアカウント遷移", async () => {
-    // マイアカウントリンクをクリックして、マイアカウントページを表示する
-    await driver.findElement(By.xpath("//a[contains(text(), 'マイアカウント')]")).click();
-
-    /* @test title */
-    await driver.getTitle().then(function (title) {
-      assert.equal(title, "マイアカウント｜セキュリテ");
-    });
-    await takeScreentJust(driver, '005_myaccount', 'png');
-  });
+  // it("トップページ ログインページに遷移", async () => {
+  //
+  //   await driver.findElement(By.linkText('ログイン')).click();
+  //   await driver.wait(until.titleContains('ログイン'), 10000);
+  //  
+  //   /* @test title */ 
+  //   await driver.getTitle().then(function (title) {
+  //     assert.equal(title, "ログイン｜セキュリテ");
+  //   });
+  //   await takeScreentJust(driver, '002_login', 'png');
+  // });
+  //
+  // it("ログインページ ブランクフォームエラー", async () => {
+  //   // フォームをブランクで送信
+  //   await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
+  //   await takeScreentJust(driver, '003_loginfail', 'png');
+  //  
+  //   const errorMsg = await driver.findElement(By.className("error_msg")).getText();
+  //   /* @test invalidate message */
+  //   assert.equal(errorMsg, "ログインIDまたはパスワードを見直してください。");
+  // });
+  //
+  // it("ログインページ ログイン成功", async () => {
+  //   // ログインフォームを入力してログイン
+  //   await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys("msohashi");
+  //   await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("YaIkani13");
+  //   await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
+  //  
+  //   /* @test title */
+  //   await driver.getTitle().then(function (title) {
+  //     assert.equal(title, "マイページ｜セキュリテ");
+  //   });
+  //   await takeScreentJust(driver, '004_loginsuccess', 'png');
+  // });
+  //
+  // it("マイページ マイアカウント遷移", async () => {
+  //   // マイアカウントリンクをクリックして、マイアカウントページを表示する
+  //   await driver.findElement(By.xpath("//a[contains(text(), 'マイアカウント')]")).click();
+  //
+  //   /* @test title */
+  //   await driver.getTitle().then(function (title) {
+  //     assert.equal(title, "マイアカウント｜セキュリテ");
+  //   });
+  //   await takeScreentJust(driver, '005_myaccount', 'png');
+  // });
   
 });
