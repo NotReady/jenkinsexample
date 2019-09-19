@@ -95,7 +95,8 @@ describe("デモ", () => {
       
       console.log(timestamp() + ": trace3");
       // @test title is match?
-      assert.equal(title, "セキュリテ - インパクト投資プラットフォーム");
+      // assert.equal(title, "セキュリテ - インパクト投資プラットフォーム");
+      expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
     });
 
     await takeScreentJust(driver, '001_top', 'png');
