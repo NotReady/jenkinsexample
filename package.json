@@ -13,8 +13,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chromedriver": "^77.0.0",
+    "date-util": "^1.2.1",
     "jest": "^23.6.0",
-    "selenium-webdriver": "^4.0.0-alpha.3",
-    "chromedriver": "^77.0.0"
+    "resemblejs": "^3.2.2",
+    "selenium-webdriver": "^4.0.0-alpha.3"
   }
 }
