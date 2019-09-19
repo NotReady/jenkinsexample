@@ -114,6 +114,16 @@ describe("デモ", () => {
         // スクショ用のdir作成
         global.now = new Date();
         const parentDir = "screen_shot/";
+        try{
+          fs.statSync(parentDir);
+        }catch (err) {
+          if( err.code === 'ENOENT'){
+            fs.mkdirsSync(parentDir);
+          }else{
+            throw err;
+          }
+        }
+        
         const nameDirsHistory = fs.readdirSync(parentDir);
         global.namePreviousDir = parentDir + nameDirsHistory[nameDirsHistory.length-1] + "/";
         global.nameNewDir = parentDir + date.format(now, 'YYYYMMDDHHmmss').toString() + "/";
@@ -198,6 +208,17 @@ describe("デモ", () => {
       expect(title).toBe("マイアカウント｜セキュリテ");
     });
     await takeScreentJust(driver, '005_myaccount', 'png');
+  });
+
+  it("ログアウト", async () => {
+    // ログアウトをクリックしてログインページに遷移する
+    await driver.findElement(By.xpath("//a[contains(text(), 'ログアウト')]")).click();
+
+    /* @test title */
+    await driver.getTitle().then(function (title) {
+      expect(title).toBe("ログイン｜セキュリテ");
+    });
+    await takeScreentJust(driver, '006_logout', 'png');
   });
   
 });
