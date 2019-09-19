@@ -107,6 +107,8 @@ describe("デモ", () => {
 
     await driver.findElement(By.linkText('ログイン')).click();
     await driver.wait(until.titleContains('ログイン'), 10000);
+    
+    /* @test title */ 
     await driver.getTitle().then(function (title) {
       assert.equal(title, "ログイン｜セキュリテ");
     });
@@ -119,7 +121,7 @@ describe("デモ", () => {
     await takeScreentJust(driver, '003_loginfail', 'png');
     
     const errorMsg = await driver.findElement(By.className("error_msg")).getText();
-    /* @test */
+    /* @test invalidate message */
     assert.equal(errorMsg, "ログインIDまたはパスワードを見直してください。");
   });
 
@@ -129,8 +131,22 @@ describe("デモ", () => {
     await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("YaIkani13");
     await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
     
+    /* @test title */
+    await driver.getTitle().then(function (title) {
+      assert.equal(title, "マイページ｜セキュリテ");
+    });
     await takeScreentJust(driver, '004_loginsuccess', 'png');
+  });
 
+  it("マイページ マイアカウント遷移", async () => {
+    // マイアカウントリンクをクリックして、マイアカウントページを表示する
+    await driver.findElement(By.xpath("//a[contains(text(), 'マイアカウント')]")).click();
+
+    /* @test title */
+    await driver.getTitle().then(function (title) {
+      assert.equal(title, "マイアカウント｜セキュリテ");
+    });
+    await takeScreentJust(driver, '005_myaccount', 'png');
   });
   
 });
