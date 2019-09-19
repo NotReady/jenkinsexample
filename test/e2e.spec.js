@@ -119,8 +119,6 @@ describe("デモ", () => {
     
         fs.mkdirsSync(nameNewDir);
         fs.mkdirsSync(nameNewDiffDir);
-    
-        global.nameFileNew = nameNewDir + nameFile + ".png";
   });
 
   afterAll(() => {
