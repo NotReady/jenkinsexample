@@ -136,8 +136,8 @@ describe("デモ", () => {
   });
 
   afterAll(() => {
-    return driver.quit();
     console.log(cpModule.scCopy());
+    return driver.quit();
   });
 
   it("トップページ ページタイトル", async () => {
