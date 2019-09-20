@@ -22,3 +22,5 @@ nameLatestDir = parentDir + nameDirsHistory[nameDirsHistory.length-1];
 
 // 最新dirを保存する
 fs.copySync(nameLatestDir, saveDir);
+
+console.log("copy screentshot completed src:" + nameLatestDir + " dst:" + saveDir);
