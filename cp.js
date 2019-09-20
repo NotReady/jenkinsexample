@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
 
 module.exports.scCopy = function() {
-// スクショdir
+    // スクショdir
     const parentDir = "./screen_shot/";
 // 保存先dir
     const saveDir = parentDir + "latest";
@@ -25,4 +25,4 @@ module.exports.scCopy = function() {
     fs.copySync(nameLatestDir, saveDir);
 
     console.log("copy screentshot completed src:" + nameLatestDir + " dst:" + saveDir);
-}
+};

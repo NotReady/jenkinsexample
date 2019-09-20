@@ -7,7 +7,7 @@ const { promisify } = require("util");
 const webdriver = require("selenium-webdriver");
 const { Builder, By, until } = webdriver;
 const service = new chrome.ServiceBuilder(pathOfChromeDriver).build();
-const cpModule  =require("cp.js");
+const cpModule  = require("../cp.js");
 
 chrome.setDefaultService(service);
 
