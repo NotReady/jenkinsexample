@@ -24,5 +24,5 @@ module.exports.scCopy = function() {
     // 最新dirを保存する
     fs.copySync(nameLatestDir, saveDir);
 
-    console.log("copy screentshot completed src:" + nameLatestDir + " dst:" + saveDir);
+    return "copy screentshot completed src:" + nameLatestDir + " dst:" + saveDir;
 };
