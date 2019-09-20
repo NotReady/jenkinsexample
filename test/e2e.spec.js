@@ -154,16 +154,79 @@ describe("デモ", () => {
     putLog("trace2");
     
     await driver.getTitle().then(function (title) {
-      
       putLog("trace3");
       // @test title is match?
-      // assert.equal(title, "セキュリテ - インパクト投資プラットフォーム");
       expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
     });
 
     await takeScreentJust(driver, '001_top', 'png');
 
     putLog("trace4");
+  });
+
+  it("トップページバナー1クリック", async () => {
+    const anker = await driver.findElement(By.xpath("//div[@class='gridpane']/div[2]/a")).getAttribute("href");
+    await driver.findElement(By.xpath("//div[@class='gridpane']/div[2]/a")).click();
+    const testingUrl = await driver.getCurrentUrl();
+
+    // アンカーの導通確認
+    expect(testingUrl).toBe(anker);
+    await takeScreentJust(driver, '000_banner1', 'png');
+  });
+
+  it("トップページバナー2クリック", async () => {
+    // トップページに戻る
+    await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
+    
+    const anker = await driver.findElement(By.xpath("//div[@class='gridpane']/div[3]/a")).getAttribute("href");
+    await driver.findElement(By.xpath("//div[@class='gridpane']/div[3]/a")).click();
+    const testingUrl = await driver.getCurrentUrl();
+
+    // アンカーの導通確認
+    expect(testingUrl).toBe(anker);
+    await takeScreentJust(driver, '000_banner2', 'png');
+  });
+
+  it("セキュリテニュース1クリック", async () => {
+    // トップページに戻る
+    await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
+
+    const anker = await driver.findElement(By.xpath("//div[@class='topnews clearfix']/dl[1]/dd/ul/li[1]/a")).getAttribute("href");
+    await driver.findElement(By.xpath("//div[@class='topnews clearfix']/dl[1]/dd/ul/li[1]/a")).click();
+    
+    const testingUrl = await driver.getCurrentUrl();
+
+    // アンカーの導通確認
+    expect(testingUrl).toBe(anker);
+    await takeScreentJust(driver, '000_securite_news1', 'png');
+  });
+
+  it("ファンドニュース1クリック", async () => {
+    // トップページに戻る
+    await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
+
+    const anker = await driver.findElement(By.xpath("//div[@class='topnews clearfix']/dl[2]/dd/a[1]")).getAttribute("href");
+    await driver.findElement(By.xpath("//div[@class='topnews clearfix']/dl[2]/dd/a[1]")).click();
+
+    const testingUrl = await driver.getCurrentUrl();
+
+    // アンカーの導通確認
+    expect(testingUrl).toBe(anker);
+    await takeScreentJust(driver, '000_fund_news1', 'png');
+  });
+
+  it("ファンド1クリック", async () => {
+    // トップページに戻る
+    await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
+
+    const anker = await driver.findElement(By.xpath("//div[@class='project']/div[1]/div[1]/a[1]")).getAttribute("href");
+    await driver.findElement(By.xpath("//div[@class='project']/div[1]/div[1]/a[1]")).click();
+
+    const testingUrl = await driver.getCurrentUrl();
+
+    // アンカーの導通確認
+    expect(testingUrl).toBe(anker);
+    await takeScreentJust(driver, '000_fund1', 'png');
   });
   
   it("トップページ ログインページに遷移", async () => {
@@ -187,7 +250,7 @@ describe("デモ", () => {
     /* @test invalidate message */
     expect(errorMsg).toBe("ログインIDまたはパスワードを見直してください。");
   });
-  
+
 
   it("ログインページ ログイン成功", async () => {
     // ログインフォームを入力してログイン
