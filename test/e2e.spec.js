@@ -43,10 +43,10 @@ async function takeScreentJust(driver, fileName, ext)
 
   putLog("takeScreenJust flushed screenshot");
 
-  await driver.manage().window().setRect({
-    width: 1920,
-    height: 1080,
-  });
+  // await driver.manage().window().setRect({
+  //   width: 1920,
+  //   height: 1080,
+  // });
 
   putLog("takeScreenJust defaultsized window");
 
