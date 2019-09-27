@@ -13,12 +13,20 @@ chrome.setDefaultService(service);
 
 let driver;
 
+function getSCNumber(){
+  var sc_counter = 0;
+  return function(){
+    return ( "000" + ++sc_counter ).slice(-3);
+  }
+}
+    
 jest.setTimeout(60000);
 // console.log(pathOfChromeDriver);
 
 // コンテンツサイズにウインドウを合わせてキャプチャをとる
-async function takeScreentJust(driver, fileName, ext)
+async function takeScreentJust(driver, fileName)
 {
+  const numberedFileName = getSCNumber()() + `_${fileName}.png`;
   putLog("takeScreenJust Started");
 
   let contentWidth = await driver.executeScript("return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);");
@@ -36,9 +44,9 @@ async function takeScreentJust(driver, fileName, ext)
   putLog("takeScreenJust taked screenshot");
 
   let buffer = Buffer.from(base64, 'base64');
-  //await promisify(fs.writeFile)(fileName + "." + ext, buffer);
-  const pathFileNameNewer = nameNewDir + fileName + "." + ext;
-  const pathFileNameDiff = nameNewDiffDir + fileName + "." + ext;
+
+  const pathFileNameNewer = nameNewDir + numberedFileName;
+  const pathFileNameDiff = nameNewDiffDir + numberedFileName;
   await promisify(fs.writeFile)(pathFileNameNewer, buffer); // 保存
 
   putLog("takeScreenJust flushed screenshot");
@@ -50,7 +58,7 @@ async function takeScreentJust(driver, fileName, ext)
 
   putLog("takeScreenJust defaultsized window");
 
-  const pathFileNamePrevious = namePreviousDir + fileName + "." + ext;
+  const pathFileNamePrevious = namePreviousDir + numberedFileName;
   
   try {
     fs.statSync(pathFileNamePrevious);
@@ -159,7 +167,7 @@ describe("デモ", () => {
       expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
     });
 
-    await takeScreentJust(driver, '001_top', 'png');
+    await takeScreentJust(driver, 'top');
 
     putLog("trace4");
   });
@@ -171,7 +179,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '002_banner1', 'png');
+    await takeScreentJust(driver, 'banner1');
   });
 
   it("トップページバナー2クリック", async () => {
@@ -184,7 +192,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '003_banner2', 'png');
+    await takeScreentJust(driver, 'banner2');
   });
 
   it("セキュリテニュース1クリック", async () => {
@@ -198,7 +206,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '004_securite_news1', 'png');
+    await takeScreentJust(driver, 'securite_news1');
   });
 
   it("ファンドニュース1クリック", async () => {
@@ -212,7 +220,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '005_fund_news1', 'png');
+    await takeScreentJust(driver, 'fund_news1');
   });
 
   it("ファンド1クリック", async () => {
@@ -226,7 +234,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '006_fund1', 'png');
+    await takeScreentJust(driver, 'fund1');
   });
   
   it("トップページ ログインページに遷移", async () => {
@@ -238,13 +246,13 @@ describe("デモ", () => {
     await driver.getTitle().then(function (title) {
       expect(title).toBe("ログイン｜セキュリテ");
     });
-    await takeScreentJust(driver, '007_login', 'png');
+    await takeScreentJust(driver, 'login');
   });
 
   it("ログインページ ブランクフォームエラー", async () => {
     // フォームをブランクで送信
     await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
-    await takeScreentJust(driver, '008_loginfail', 'png');
+    await takeScreentJust(driver, 'loginfail');
 
     const errorMsg = await driver.findElement(By.className("error_msg")).getText();
     /* @test invalidate message */
@@ -262,7 +270,7 @@ describe("デモ", () => {
     await driver.getTitle().then(function (title) {
       expect(title).toBe("マイページ｜セキュリテ");
     });
-    await takeScreentJust(driver, '009_loginsuccess', 'png');
+    await takeScreentJust(driver, 'loginsuccess');
   });
 
   it("マイページ マイアカウント遷移", async () => {
@@ -273,7 +281,7 @@ describe("デモ", () => {
     await driver.getTitle().then(function (title) {
       expect(title).toBe("マイアカウント｜セキュリテ");
     });
-    await takeScreentJust(driver, '010_myaccount', 'png');
+    await takeScreentJust(driver, 'myaccount');
   });
 
   it("ログアウト", async () => {
@@ -284,7 +292,7 @@ describe("デモ", () => {
     await driver.getTitle().then(function (title) {
       expect(title).toBe("ログイン｜セキュリテ");
     });
-    await takeScreentJust(driver, '011_logout', 'png');
+    await takeScreentJust(driver, 'logout');
   });
   
 });
