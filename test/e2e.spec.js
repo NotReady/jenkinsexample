@@ -13,20 +13,22 @@ chrome.setDefaultService(service);
 
 let driver;
 
-function getSCNumber(){
+function getCounter(){
   var sc_counter = 0;
   return function(){
     return ( "000" + ++sc_counter ).slice(-3);
   }
 }
-    
+
+let counter = getCounter();
+
 jest.setTimeout(60000);
 // console.log(pathOfChromeDriver);
 
 // コンテンツサイズにウインドウを合わせてキャプチャをとる
 async function takeScreentJust(driver, fileName)
 {
-  const numberedFileName = getSCNumber()() + `_${fileName}.png`;
+  const numberedFileName = counter() + `_${fileName}.png`;
   putLog("takeScreenJust Started");
 
   let contentWidth = await driver.executeScript("return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);");
