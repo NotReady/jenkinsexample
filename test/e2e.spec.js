@@ -171,7 +171,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '000_banner1', 'png');
+    await takeScreentJust(driver, '002_banner1', 'png');
   });
 
   it("トップページバナー2クリック", async () => {
@@ -184,7 +184,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '000_banner2', 'png');
+    await takeScreentJust(driver, '003_banner2', 'png');
   });
 
   it("セキュリテニュース1クリック", async () => {
@@ -198,7 +198,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '000_securite_news1', 'png');
+    await takeScreentJust(driver, '004_securite_news1', 'png');
   });
 
   it("ファンドニュース1クリック", async () => {
@@ -212,7 +212,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '000_fund_news1', 'png');
+    await takeScreentJust(driver, '005_fund_news1', 'png');
   });
 
   it("ファンド1クリック", async () => {
@@ -226,7 +226,7 @@ describe("デモ", () => {
 
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, '000_fund1', 'png');
+    await takeScreentJust(driver, '006_fund1', 'png');
   });
   
   it("トップページ ログインページに遷移", async () => {
@@ -238,13 +238,13 @@ describe("デモ", () => {
     await driver.getTitle().then(function (title) {
       expect(title).toBe("ログイン｜セキュリテ");
     });
-    await takeScreentJust(driver, '002_login', 'png');
+    await takeScreentJust(driver, '007_login', 'png');
   });
 
   it("ログインページ ブランクフォームエラー", async () => {
     // フォームをブランクで送信
     await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
-    await takeScreentJust(driver, '003_loginfail', 'png');
+    await takeScreentJust(driver, '008_loginfail', 'png');
 
     const errorMsg = await driver.findElement(By.className("error_msg")).getText();
     /* @test invalidate message */
@@ -262,7 +262,7 @@ describe("デモ", () => {
     await driver.getTitle().then(function (title) {
       expect(title).toBe("マイページ｜セキュリテ");
     });
-    await takeScreentJust(driver, '004_loginsuccess', 'png');
+    await takeScreentJust(driver, '009_loginsuccess', 'png');
   });
 
   it("マイページ マイアカウント遷移", async () => {
@@ -273,7 +273,7 @@ describe("デモ", () => {
     await driver.getTitle().then(function (title) {
       expect(title).toBe("マイアカウント｜セキュリテ");
     });
-    await takeScreentJust(driver, '005_myaccount', 'png');
+    await takeScreentJust(driver, '010_myaccount', 'png');
   });
 
   it("ログアウト", async () => {
@@ -284,7 +284,7 @@ describe("デモ", () => {
     await driver.getTitle().then(function (title) {
       expect(title).toBe("ログイン｜セキュリテ");
     });
-    await takeScreentJust(driver, '006_logout', 'png');
+    await takeScreentJust(driver, '011_logout', 'png');
   });
   
 });
