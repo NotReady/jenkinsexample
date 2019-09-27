@@ -24,10 +24,10 @@ async function takeScreentJust(driver, fileName, ext)
   let contentWidth = await driver.executeScript("return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);");
   let contentHeight = await driver.executeScript("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);");
   
-  // await driver.manage().window().setRect({
-  //   width: contentWidth,
-  //   height: contentHeight,
-  // });
+  await driver.manage().window().setRect({
+    width: contentWidth,
+    height: contentHeight,
+  });
 
   putLog("takeScreenJust pagesized window");
 
@@ -43,10 +43,10 @@ async function takeScreentJust(driver, fileName, ext)
 
   putLog("takeScreenJust flushed screenshot");
 
-  // await driver.manage().window().setRect({
-  //   width: 1920,
-  //   height: 1080,
-  // });
+  await driver.manage().window().setRect({
+    width: 1920,
+    height: 1080,
+  });
 
   putLog("takeScreenJust defaultsized window");
 
