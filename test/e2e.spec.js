@@ -357,9 +357,10 @@ describe("デモ", () => {
 
     const testingUrl = await driver.getCurrentUrl();
 
+    await takeScreentJust(driver, "event_news1", false);
+    
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
-    await takeScreentJust(driver, "event_news1", false);
   });
   
 });
