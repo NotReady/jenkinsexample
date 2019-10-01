@@ -317,20 +317,17 @@ describe("デモ", () => {
     await driver.findElement(By.xpath("//button[@id='btnNext']")).click();
     
     // ボタン表示待ち
-    await  driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 10000);
-    
-    // パスワードを入力
-    await driver.findElement(By.xpath("//input[@id='passwd']")).sendKeys("YaIkani13");
+    await  driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 10000).sendKeys("YaIkani13");
     // ログイン
     await driver.findElement(By.xpath("//button[@id='btnSubmit']")).click();
-
+    
     // セキュリテにリダイレクト
     await driver.getTitle().then(function (title) {
       expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
     });
-    
-    await takeScreentJust(driver, 'yahoo - authorized');
 
+    await takeScreentJust(driver, 'yahoo - authorized');
+    
   });
 
   
