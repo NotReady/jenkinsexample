@@ -355,12 +355,20 @@ describe("デモ", () => {
     const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).getAttribute("href");
     await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).click();
 
-    const testingUrl = await driver.getCurrentUrl();
+    // ウインドウのオープン待ち
+    await driver.wait(until.elementLocated(driver.getWindowHandle() > 1), 5*1000).then(el=>{
+      // ウインドウフォーカス移動
+      driver.switchTo().window(driver.getAllWindowHandles().slice(-1)[0]);
+      const testingUrl = driver.getCurrentUrl();
+      // アンカーの導通確認
+      expect(testingUrl).toBe(anker);
 
-    await takeScreentJust(driver, "event_news1", false);
-    
-    // アンカーの導通確認
-    expect(testingUrl).toBe(anker);
+      takeScreentJust(driver, "event_news1", false);
+
+      // 元のウインドウに戻す
+      driver.close();
+      driver.switchTo().window(wid);
+    });
   });
   
 });
