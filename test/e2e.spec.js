@@ -301,9 +301,8 @@ describe("デモ", () => {
 
   it("Yahooログイン", async () => {
     
-    // cookieをクリアして認証エンドポイントへ
+    // cookieをクリアして認証エンドポイントへリダイレクト
     await driver.manage().deleteAllCookies();
-    
     await driver.findElement(By.xpath("//a[@class='btn yahoo large']")).click();
     
     // タイトル検証
@@ -320,7 +319,6 @@ describe("デモ", () => {
 
     await takeScreentJust(driver, 'yahoo - next', false);
     
-    driver.manage().timeo
     // ボタン表示待ち
     await driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 5*1000).then(el=>{
       el.sendKeys("YaIkani13");
