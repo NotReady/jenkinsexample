@@ -317,7 +317,7 @@ describe("デモ", () => {
     await driver.findElement(By.xpath("//button[@id='btnNext']")).click();
     
     // ボタン表示待ち
-    const elm = await driver.wait(driver.until.elementLocated(By.xpath("//input[@id='passwd']")), 5*1000);
+    const elm = await driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 5*1000);
     elm.sendKeys("YaIkani13");
 
     // var user = driver.wait(until.elementLocated(By.id('email')), timeout);
