@@ -315,12 +315,13 @@ describe("デモ", () => {
     await driver.findElement(By.xpath("//input[@id='username']")).sendKeys("by_lilack");
     // 次へ
     await driver.findElement(By.xpath("//button[@id='btnNext']")).click();
+
+    await takeScreentJust(driver, 'yahoo - next');
     
     // ボタン表示待ち
-    const elm = await driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 5*1000);
-    elm.sendKeys("YaIkani13");
-
-    // var user = driver.wait(until.elementLocated(By.id('email')), timeout);
+    await driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 5*1000).then(el=>{
+      el.sendKeys("YaIkani13");
+    });
     
     // ログイン
     await driver.findElement(By.xpath("//button[@id='btnSubmit']")).click();
