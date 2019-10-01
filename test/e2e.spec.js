@@ -26,7 +26,7 @@ jest.setTimeout(60000);
 // console.log(pathOfChromeDriver);
 
 // コンテンツサイズにウインドウを合わせてキャプチャをとる
-async function takeScreentJust(driver, fileName, expect=true)
+async function takeScreentJust(driver, fileName, verify=true)
 {
   const numberedFileName = counter() + `_${fileName}.png`;
   putLog("takeScreenJust Started");
@@ -88,7 +88,7 @@ async function takeScreentJust(driver, fileName, expect=true)
       });
 
   putLog("misMatchPercentage: " + misMatchPercentage);
-  if( expect === true ){
+  if( verify === true ){
     expect(misMatchPercentage).toBeLessThan(1); 
   }
   
