@@ -187,7 +187,7 @@ describe("デモ", () => {
   it("トップページバナー2クリック", async () => {
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
-    
+
     const anker = await driver.findElement(By.xpath("//div[@class='gridpane']/div[3]/a")).getAttribute("href");
     await driver.findElement(By.xpath("//div[@class='gridpane']/div[3]/a")).click();
     const testingUrl = await driver.getCurrentUrl();
@@ -203,7 +203,7 @@ describe("デモ", () => {
 
     const anker = await driver.findElement(By.xpath("//div[@class='topnews clearfix']/dl[1]/dd/ul/li[1]/a")).getAttribute("href");
     await driver.findElement(By.xpath("//div[@class='topnews clearfix']/dl[1]/dd/ul/li[1]/a")).click();
-    
+
     const testingUrl = await driver.getCurrentUrl();
 
     // アンカーの導通確認
@@ -238,7 +238,7 @@ describe("デモ", () => {
     expect(testingUrl).toBe(anker);
     await takeScreentJust(driver, 'fund1');
   });
-  
+
   it("トップページ ログインページに遷移", async () => {
 
     await driver.findElement(By.linkText('ログイン')).click();
@@ -296,5 +296,42 @@ describe("デモ", () => {
     });
     await takeScreentJust(driver, 'logout');
   });
+
+  it("Yahooログイン", async () => {
+    
+    // cookieをクリアして認証エンドポイントへ
+    await driver.manage().deleteAllCookies();
+    
+    await driver.findElement(By.xpath("//a[@class='btn yahoo large']")).click();
+    
+    // 一応タイトル検証
+    await driver.getTitle().then(function(title){
+      expect(title).toBe("ログイン - Yahoo! JAPAN");
+    });
+    
+    await takeScreentJust(driver, 'yahoo - authorization');
+
+    // IDを入力
+    await driver.findElement(By.xpath("//input[@id='username']")).sendKeys("by_lilack");
+    // 次へ
+    await driver.findElement(By.xpath("//button[@id='btnNext']")).click();
+    
+    // ボタン表示待ち
+    await  driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 1000);
+    
+    // パスワードを入力
+    await driver.findElement(By.xpath("//input[@id='passwd']")).sendKeys("YaIkani13");
+    // ログイン
+    await driver.findElement(By.xpath("//button[@id='btnSubmit']")).click();
+
+    // セキュリテにリダイレクト
+    await driver.getTitle().then(function (title) {
+      expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
+    });
+    
+    await takeScreentJust(driver, 'yahoo - authorized');
+
+  });
+
   
 });
