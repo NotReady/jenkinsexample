@@ -338,5 +338,30 @@ describe("デモ", () => {
     
   });
 
+  it("ゆっくりいそげ1クリック", async () => {
+
+    const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[1]/dd/a[1]")).getAttribute("href");
+    await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[1]/dd/a[1]")).click();
+
+    const testingUrl = await driver.getCurrentUrl();
+
+    // アンカーの導通確認
+    expect(testingUrl).toBe(anker);
+    await takeScreentJust(driver, 'director_blog1', false);
+  });
+
+  it("イベント1クリック", async () => {
+    // トップページに戻る
+    await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
+
+    const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).getAttribute("href");
+    await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).click();
+
+    const testingUrl = await driver.getCurrentUrl();
+
+    // アンカーの導通確認
+    expect(testingUrl).toBe(anker);
+    await takeScreentJust(driver, "event_news1", false);
+  });
   
 });
