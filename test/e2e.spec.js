@@ -317,7 +317,7 @@ describe("デモ", () => {
     await driver.findElement(By.xpath("//button[@id='btnNext']")).click();
     
     // ボタン表示待ち
-    await  driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 10000).sendKeys("YaIkani13");
+    await  driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 20000).sendKeys("YaIkani13");
     // ログイン
     await driver.findElement(By.xpath("//button[@id='btnSubmit']")).click();
     
