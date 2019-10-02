@@ -300,16 +300,16 @@ describe("デモ", () => {
   });
 
   it("Yahooログイン", async () => {
-    
+
     // cookieをクリアして認証エンドポイントへリダイレクト
     await driver.manage().deleteAllCookies();
     await driver.findElement(By.xpath("//a[@class='btn yahoo large']")).click();
-    
+
     // タイトル検証
     await driver.getTitle().then(function(title){
       expect(title).toBe("ログイン - Yahoo! JAPAN");
     });
-    
+
     await takeScreentJust(driver, 'yahoo - authorization', false);
 
     // IDを入力
@@ -318,22 +318,22 @@ describe("デモ", () => {
     await driver.findElement(By.xpath("//button[@id='btnNext']")).click();
 
     await takeScreentJust(driver, 'yahoo - next', false);
-    
+
     // ボタン表示待ち
     await driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 5*1000).then(el=>{
       el.sendKeys("YaIkani13");
     });
-    
+
     // ログイン
     await driver.findElement(By.xpath("//button[@id='btnSubmit']")).click();
-    
+
     // セキュリテにリダイレクト
     await driver.getTitle().then(function (title) {
       expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
     });
 
     await takeScreentJust(driver, 'yahoo - authorized');
-    
+
   });
 
   it("ゆっくりいそげ1クリック", async () => {
@@ -354,21 +354,24 @@ describe("デモ", () => {
 
     const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).getAttribute("href");
     await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).click();
+    
+    const ws = await driver.getAllWindowHandles();
+    const wid = await driver.getWindowHandle();
+    console.log(ws);
+    console.log("window num=" + ws.length);
+    
+    // ウインドウフォーカス移動
+    await driver.switchTo().window(ws.slice(-1)[0]);
+    const testingUrl = await driver.getCurrentUrl();
+    // アンカーの導通確認
+    expect(testingUrl).toBe(anker);
 
-    // ウインドウのオープン待ち
-    await driver.wait(until.elementLocated(driver.getWindowHandle() > 1), 5*1000).then(el=>{
-      // ウインドウフォーカス移動
-      driver.switchTo().window(driver.getAllWindowHandles().slice(-1)[0]);
-      const testingUrl = driver.getCurrentUrl();
-      // アンカーの導通確認
-      expect(testingUrl).toBe(anker);
+    await takeScreentJust(driver, "event_news1", false);
 
-      takeScreentJust(driver, "event_news1", false);
-
-      // 元のウインドウに戻す
-      driver.close();
-      driver.switchTo().window(wid);
-    });
+    // 元のウインドウに戻す
+    await driver.close();
+    await driver.switchTo().window(wid);
+    
   });
   
 });
