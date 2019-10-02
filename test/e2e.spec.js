@@ -354,7 +354,13 @@ describe("デモ", () => {
 
     const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).getAttribute("href");
     await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).click();
-    
+
+    // 新規ウインドウのオープン待ち
+    await driver.wait(new webdriver.Condition('window open condition', async () =>{
+        const handles = await driver.getAllWindowHandles();
+        return handles.length > 1;
+    }), 10*1000);
+
     const ws = await driver.getAllWindowHandles();
     const wid = await driver.getWindowHandle();
     console.log(ws);
@@ -363,12 +369,13 @@ describe("デモ", () => {
     // ウインドウフォーカス移動
     await driver.switchTo().window(ws.slice(-1)[0]);
     const testingUrl = await driver.getCurrentUrl();
+    
     // アンカーの導通確認
     expect(testingUrl).toBe(anker);
 
     await takeScreentJust(driver, "event_news1", false);
 
-    // 元のウインドウに戻す
+    // ウインドウフォーカスを戻す
     await driver.close();
     await driver.switchTo().window(wid);
     
