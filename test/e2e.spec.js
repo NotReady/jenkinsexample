@@ -171,7 +171,7 @@ describe("デモ", () => {
       expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
     });
 
-    await takeScreentJust(driver, 'top');
+    await takeScreentJust(driver, 'top', false);
 
     putLog("trace4");
   });
@@ -332,7 +332,7 @@ describe("デモ", () => {
       expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
     });
 
-    await takeScreentJust(driver, 'yahoo - authorized');
+    await takeScreentJust(driver, 'yahoo - authorized', false);
 
   });
 
@@ -354,7 +354,7 @@ describe("デモ", () => {
 
     const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).getAttribute("href");
     await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).click();
-
+    
     // 新規ウインドウのオープン待ち
     await driver.wait(new webdriver.Condition('window open condition', async () =>{
         const handles = await driver.getAllWindowHandles();
