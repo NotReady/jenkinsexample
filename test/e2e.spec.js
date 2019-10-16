@@ -351,9 +351,11 @@ describe("デモ", () => {
   it("イベント1クリック", async () => {
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
-
-    const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[@target=\"_blank\"]")).getAttribute("href");
-    await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).click();
+    
+    const element = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[@target=\"_blank\"]"));
+    
+    const anker = await element.getAttribute("href");
+    await element.click();
     
     // 新規ウインドウのオープン待ち
     await driver.wait(new webdriver.Condition('window open condition', async () =>{
