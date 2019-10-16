@@ -352,7 +352,7 @@ describe("デモ", () => {
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
 
-    const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).getAttribute("href");
+    const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[@target=\"_blank\"]")).getAttribute("href");
     await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[2]/dd/a[1]")).click();
     
     // 新規ウインドウのオープン待ち
