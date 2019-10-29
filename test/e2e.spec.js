@@ -299,45 +299,48 @@ describe("デモ", () => {
     await takeScreentJust(driver, 'logout');
   });
 
-  it("Yahooログイン", async () => {
-
-    // cookieをクリアして認証エンドポイントへリダイレクト
-    await driver.manage().deleteAllCookies();
-    await driver.findElement(By.xpath("//a[@class='btn yahoo large']")).click();
-
-    // タイトル検証
-    await driver.getTitle().then(function(title){
-      expect(title).toBe("ログイン - Yahoo! JAPAN");
-    });
-
-    await takeScreentJust(driver, 'yahoo - authorization', false);
-
-    // IDを入力
-    await driver.findElement(By.xpath("//input[@id='username']")).sendKeys("by_lilack");
-    // 次へ
-    await driver.findElement(By.xpath("//button[@id='btnNext']")).click();
-
-    await takeScreentJust(driver, 'yahoo - next', false);
-
-    // ボタン表示待ち
-    await driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 5*1000).then(el=>{
-      el.sendKeys("YaIkani13");
-    });
-
-    // ログイン
-    await driver.findElement(By.xpath("//button[@id='btnSubmit']")).click();
-
-    // セキュリテにリダイレクト
-    await driver.getTitle().then(function (title) {
-      expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
-    });
-
-    await takeScreentJust(driver, 'yahoo - authorized', false);
-
-  });
+  // it("Yahooログイン", async () => {
+  //
+  //   // cookieをクリアして認証エンドポイントへリダイレクト
+  //   await driver.manage().deleteAllCookies();
+  //   await driver.findElement(By.xpath("//a[@class='btn yahoo large']")).click();
+  //
+  //   // タイトル検証
+  //   await driver.getTitle().then(function(title){
+  //     expect(title).toBe("ログイン - Yahoo! JAPAN");
+  //   });
+  //
+  //   await takeScreentJust(driver, 'yahoo - authorization', false);
+  //
+  //   // IDを入力
+  //   await driver.findElement(By.xpath("//input[@id='username']")).sendKeys("by_lilack");
+  //   // 次へ
+  //   await driver.findElement(By.xpath("//button[@id='btnNext']")).click();
+  //
+  //   await takeScreentJust(driver, 'yahoo - next', false);
+  //
+  //   // ボタン表示待ち
+  //   await driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 5*1000).then(el=>{
+  //     el.sendKeys("YaIkani13");
+  //   });
+  //
+  //   // ログイン
+  //   await driver.findElement(By.xpath("//button[@id='btnSubmit']")).click();
+  //
+  //   // セキュリテにリダイレクト
+  //   await driver.getTitle().then(function (title) {
+  //     expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
+  //   });
+  //
+  //   await takeScreentJust(driver, 'yahoo - authorized', false);
+  //
+  // });
 
   it("ゆっくりいそげ1クリック", async () => {
 
+    // トップページに戻る
+    await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
+    
     const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[1]/dd/a[1]")).getAttribute("href");
     await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[1]/dd/a[1]")).click();
 
