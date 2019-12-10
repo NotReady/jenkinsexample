@@ -29,7 +29,7 @@ module.exports.scCopy = function() {
         fs.removeSync(saveDir);
     } catch (err) {
         if (err.code !== 'ENOENT') {
-            generalUtil.printLog(err.message);
+            generalUtil.ErrorLog(err.message);
             throw err;
         }
     }
@@ -55,7 +55,7 @@ module.exports.scCopy = function() {
 module.exports.takeCapture = async function(driver, fileName, verify=true)
 {
     const numberedFileName = counter() + `_${fileName}.png`;
-    generalUtil.printLog("takeScreenJust Started");
+    generalUtil.DebugLog("takeScreenJust Started");
 
     let contentWidth = await driver.executeScript("return Math.max(document.body.scrollWidth, document.body.offsetWidth, document.documentElement.clientWidth, document.documentElement.scrollWidth, document.documentElement.offsetWidth);");
     let contentHeight = await driver.executeScript("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);");
@@ -65,11 +65,11 @@ module.exports.takeCapture = async function(driver, fileName, verify=true)
         height: contentHeight,
     });
 
-    generalUtil.printLog("takeScreenJust pagesized window");
+    generalUtil.DebugLog("takeScreenJust pagesized window");
 
     let base64 = await driver.takeScreenshot();
 
-    generalUtil.printLog("takeScreenJust taked screenshot");
+    generalUtil.DebugLog("takeScreenJust taked screenshot");
 
     let buffer = Buffer.from(base64, 'base64');
 
@@ -77,14 +77,14 @@ module.exports.takeCapture = async function(driver, fileName, verify=true)
     const pathFileNameDiff = nameNewDiffDir + numberedFileName;
     await promisify(fs.writeFile)(pathFileNameNewer, buffer); // 保存
 
-    generalUtil.printLog("takeScreenJust flushed screenshot");
+    generalUtil.DebugLog("takeScreenJust flushed screenshot");
 
     await driver.manage().window().setRect({
         width: 1920,
         height: 1080,
     });
 
-    generalUtil.printLog("takeScreenJust defaultsized window");
+    generalUtil.DebugLog("takeScreenJust defaultsized window");
 
     const pathFileNamePrevious = namePreviousDir + numberedFileName;
 
@@ -92,7 +92,7 @@ module.exports.takeCapture = async function(driver, fileName, verify=true)
         fs.statSync(pathFileNamePrevious);
     }catch (err) {
         if( err.code === 'ENOENT'){
-            generalUtil.printLog("" + pathFileNamePrevious + " is not found skip resemble");
+            generalUtil.InfoLog("" + pathFileNamePrevious + " is not found skip resemble");
             return;
         }
     }
@@ -101,7 +101,7 @@ module.exports.takeCapture = async function(driver, fileName, verify=true)
     const imageBefore = fs.readFileSync(pathFileNamePrevious);
     const imageAfter  = fs.readFileSync(pathFileNameNewer);
 
-    generalUtil.printLog("takeScreenJust buffered screenshot");
+    generalUtil.DebugLog("takeScreenJust buffered screenshot");
 
     // 比較
     var misMatchPercentage = 0;
@@ -109,16 +109,16 @@ module.exports.takeCapture = async function(driver, fileName, verify=true)
         .ignoreColors()
         .onComplete(function (data){
             fs.writeFileSync(pathFileNameDiff, data.getBuffer());
-            generalUtil.printLog(data);
+            generalUtil.InfoLog(data);
             misMatchPercentage = data.rawMisMatchPercentage;
         });
 
-    generalUtil.printLog("misMatchPercentage: " + misMatchPercentage);
+    generalUtil.InfoLog("misMatchPercentage: " + misMatchPercentage);
     if( verify === true ){
         expect(misMatchPercentage).toBeLessThan(1);
     }
 
-    generalUtil.printLog("takeScreenJust Ended");
+    generalUtil.DebugLog("takeScreenJust Ended");
 }
 
 /**

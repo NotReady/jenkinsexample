@@ -24,12 +24,15 @@ describe("デモ", () => {
   });
 
   afterAll(() => {
-    console.log(screenshotUtil.scCopy());
+    generalUtil.InfoLog(screenshotUtil.scCopy());
     return driver.quit();
   });
 
   it("トップページ ページタイトル", async () => {
-    generalUtil.printLog("trace1");
+    
+    generalUtil.InfoLog("トップページ ページタイトル Started");
+    
+    generalUtil.DebugLog("trace1");
 
     // テスト対象のページへアクセス
     await driver.get("https://www.securite.jp");
@@ -37,20 +40,23 @@ describe("デモ", () => {
     // トップページのロード待ち
     //await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
 
-    generalUtil.printLog("trace2");
+    generalUtil.DebugLog("trace2");
     
     await driver.getTitle().then(function (title) {
-      generalUtil.printLog("trace3");
+      generalUtil.DebugLog("trace3");
       // @test title is match?
       expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
     });
 
     await screenshotUtil.takeCapture(driver, 'top', false);
 
-    generalUtil.printLog("trace4");
+    generalUtil.DebugLog("trace4");
   });
 
   it("トップページバナー1クリック", async () => {
+
+    generalUtil.InfoLog("トップページバナー1クリック Started");
+    
     const anker = await driver.findElement(By.xpath("//div[@class='gridpane']/div[2]/a")).getAttribute("href");
     await driver.findElement(By.xpath("//div[@class='gridpane']/div[2]/a")).click();
     const testingUrl = await driver.getCurrentUrl();
@@ -61,6 +67,9 @@ describe("デモ", () => {
   });
 
   it("トップページバナー2クリック", async () => {
+
+    generalUtil.InfoLog("トップページバナー2クリック Started");
+    
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
 
@@ -74,6 +83,9 @@ describe("デモ", () => {
   });
 
   it("セキュリテニュース1クリック", async () => {
+
+    generalUtil.InfoLog("セキュリテニュース1クリック Started");
+    
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
 
@@ -88,6 +100,9 @@ describe("デモ", () => {
   });
 
   it("ファンドニュース1クリック", async () => {
+
+    generalUtil.InfoLog("ファンドニュース1クリック Started");
+    
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
 
@@ -102,6 +117,9 @@ describe("デモ", () => {
   });
 
   it("ファンド1クリック", async () => {
+
+    generalUtil.InfoLog("ファンド1クリック Started");
+    
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
 
@@ -117,6 +135,8 @@ describe("デモ", () => {
 
   it("トップページ ログインページに遷移", async () => {
 
+    generalUtil.InfoLog("トップページ ログインページに遷移 Started");
+    
     await driver.findElement(By.linkText('ログイン')).click();
     await driver.wait(until.titleContains('ログイン'), 10000);
 
@@ -128,6 +148,9 @@ describe("デモ", () => {
   });
 
   it("ログインページ ブランクフォームエラー", async () => {
+
+    generalUtil.InfoLog("ログインページ ブランクフォームエラー Started");
+    
     // フォームをブランクで送信
     await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
     await screenshotUtil.takeCapture(driver, 'loginfail');
@@ -139,6 +162,9 @@ describe("デモ", () => {
 
 
   it("ログインページ ログイン成功", async () => {
+
+    generalUtil.InfoLog("ログインページ ログイン成功 Started");
+    
     // ログインフォームを入力してログイン
     await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys("msohashi");
     await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("YaIkani13");
@@ -152,6 +178,9 @@ describe("デモ", () => {
   });
 
   it("マイページ マイアカウント遷移", async () => {
+
+    generalUtil.InfoLog("マイページ マイアカウント遷移 Started");
+    
     // マイアカウントリンクをクリックして、マイアカウントページを表示する
     await driver.findElement(By.xpath("//a[contains(text(), 'マイアカウント')]")).click();
 
@@ -166,6 +195,9 @@ describe("デモ", () => {
   
   
   it("ログアウト", async () => {
+
+    generalUtil.InfoLog("ログアウト Started");
+    
     // ログアウトをクリックしてログインページに遷移する
     await driver.findElement(By.xpath("//a[contains(text(), 'ログアウト')]")).click();
 
@@ -178,6 +210,8 @@ describe("デモ", () => {
 
   it("Yahooログイン", async () => {
 
+    generalUtil.InfoLog("Yahooログイン Started");
+    
     // cookieをクリアして認証エンドポイントへリダイレクト
     await driver.manage().deleteAllCookies();
     await driver.findElement(By.xpath("//a[@class='btn yahoo large']")).click();
@@ -215,6 +249,8 @@ describe("デモ", () => {
 
   it("ゆっくりいそげ1クリック", async () => {
 
+    generalUtil.InfoLog("Yahooログイン Started");
+    
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
     
@@ -229,6 +265,9 @@ describe("デモ", () => {
   });
 
   it("イベント1クリック", async () => {
+
+    generalUtil.InfoLog("イベント1クリック Started");
+    
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
     
@@ -245,8 +284,8 @@ describe("デモ", () => {
 
     const ws = await driver.getAllWindowHandles();
     const wid = await driver.getWindowHandle();
-    console.log(ws);
-    console.log("window num=" + ws.length);
+    generalUtil.DebugLog(ws);
+    generalUtil.DebugLog("window num=" + ws.length);
     
     // ウインドウフォーカス移動
     await driver.switchTo().window(ws.slice(-1)[0]);
