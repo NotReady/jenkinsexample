@@ -2,7 +2,7 @@
 const webdriver = require("selenium-webdriver");
 const { By, until } = webdriver;
 // utirities
-const driverUtil  = require("../driverUtil.js");
+const factory  = require("../driverUtil.js");
 const screenshotUtil  = require("../screenshotUtil");
 const generalUtil  = require("../generalUtil");
 let driver;
@@ -17,8 +17,9 @@ describe("デモ", () => {
   
   beforeAll(() => {
         
-        // TODO: singletonでよいか確認
-        driver = driverUtil.getDriver("chrome");
+        // driverを取得します
+        // TODO: 複数テストケースを回す場合はsingletonでいけるか確認
+        driver = factory.getDriver("chrome");
         // スクショ用のディレクトリを作成
         screenshotUtil.setUp();
   });
@@ -28,31 +29,30 @@ describe("デモ", () => {
     return driver.quit();
   });
 
+  /**
+   * @brief トップページを表示し、レスポンスをタイトルの一致で検証します
+   */
   it("トップページ ページタイトル", async () => {
     
     generalUtil.InfoLog("トップページ ページタイトル Started");
-    
-    generalUtil.DebugLog("trace1");
 
     // テスト対象のページへアクセス
     await driver.get("https://www.securite.jp");
 
     // トップページのロード待ち
     //await driver.wait(until.titleContains('セキュリテ - インパクト投資プラットフォーム'), 10000);
-
-    generalUtil.DebugLog("trace2");
     
     await driver.getTitle().then(function (title) {
-      generalUtil.DebugLog("trace3");
       // @test title is match?
       expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
     });
 
     await screenshotUtil.takeCapture(driver, 'top', false);
-
-    generalUtil.DebugLog("trace4");
   });
 
+  /**
+   * @brief トップページのバナー1をクリックして、アンカー先に遷移できることを検証します
+   */
   it("トップページバナー1クリック", async () => {
 
     generalUtil.InfoLog("トップページバナー1クリック Started");
@@ -66,6 +66,9 @@ describe("デモ", () => {
     await screenshotUtil.takeCapture(driver, 'banner1', false);
   });
 
+  /**
+   * @brief トップページのバナー2をクリックして、アンカー先に遷移できることを検証します
+   */
   it("トップページバナー2クリック", async () => {
 
     generalUtil.InfoLog("トップページバナー2クリック Started");
@@ -82,6 +85,9 @@ describe("デモ", () => {
     await screenshotUtil.takeCapture(driver, 'banner2', false);
   });
 
+  /**
+   * @brief トップページのセキュリテニュースの記事1つめをクリックして、アンカー先に遷移できることを検証します
+   */
   it("セキュリテニュース1クリック", async () => {
 
     generalUtil.InfoLog("セキュリテニュース1クリック Started");
@@ -99,6 +105,9 @@ describe("デモ", () => {
     await screenshotUtil.takeCapture(driver, 'securite_news1', false);
   });
 
+  /**
+   * @brief トップページのファンドニュースの記事1つめをクリックして、アンカー先に遷移できることを検証します
+   */
   it("ファンドニュース1クリック", async () => {
 
     generalUtil.InfoLog("ファンドニュース1クリック Started");
@@ -116,6 +125,9 @@ describe("デモ", () => {
     await screenshotUtil.takeCapture(driver, 'fund_news1', false);
   });
 
+  /**
+   * @brief トップページのファンドの1つめをクリックして、アンカー先に遷移できることを検証します
+   */
   it("ファンド1クリック", async () => {
 
     generalUtil.InfoLog("ファンド1クリック Started");
@@ -133,6 +145,9 @@ describe("デモ", () => {
     await screenshotUtil.takeCapture(driver, 'fund1', false);
   });
 
+  /**
+   * @brief トップページからログインページに遷移できることを検証します
+   */
   it("トップページ ログインページに遷移", async () => {
 
     generalUtil.InfoLog("トップページ ログインページに遷移 Started");
@@ -147,6 +162,9 @@ describe("デモ", () => {
     await screenshotUtil.takeCapture(driver, 'login');
   });
 
+  /**
+   * @brief ログインページで未入力でログインし、バリデーションエラーを検証します
+   */
   it("ログインページ ブランクフォームエラー", async () => {
 
     generalUtil.InfoLog("ログインページ ブランクフォームエラー Started");
@@ -160,14 +178,16 @@ describe("デモ", () => {
     expect(errorMsg).toBe("ログインIDまたはパスワードを見直してください。");
   });
 
-
+  /**
+   * @brief ログインページで正常に認証を通過できることを検証します
+   */
   it("ログインページ ログイン成功", async () => {
 
     generalUtil.InfoLog("ログインページ ログイン成功 Started");
     
     // ログインフォームを入力してログイン
-    await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys("msohashi");
-    await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("YaIkani13");
+    await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys("e2etestuser");
+    await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("e2etestuser");
     await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
 
     /* @test title */
@@ -177,6 +197,9 @@ describe("デモ", () => {
     await screenshotUtil.takeCapture(driver, 'loginsuccess');
   });
 
+  /**
+   * @brief マイページでマイアカウントページに遷移できることをタイトル一致で検証します
+   */
   it("マイページ マイアカウント遷移", async () => {
 
     generalUtil.InfoLog("マイページ マイアカウント遷移 Started");
@@ -191,8 +214,97 @@ describe("デモ", () => {
     await screenshotUtil.takeCapture(driver, 'myaccount');
   });
 
-  // 会員情報変更
+  /**
+   * @brief マイページで会員情報変更ページに遷移できることをタイトル一致で検証します
+   */
+  it("マイページ 会員情報変更遷移", async () => {
+    generalUtil.InfoLog("マイページ 会員情報変更遷移 Started");
+
+    // 会員情報変更アンカーをクリックして、会員情報変更ページに遷移します
+    await driver.findElement(By.xpath("//*[@id='container']/dl/dd/ul/li[3]/a")).click();
+
+    /* @test title */
+    await driver.getTitle().then(function (title) {
+      expect(title).toBe("会員情報変更｜セキュリテ");
+    });
+    
+    await screenshotUtil.takeCapture(driver, 'account_edit');
+  });
+
+  /**
+   * @brief マイページで不正入力し、適切にバリデーションエラーが働くことを検証します
+   */
+  it("マイページ 会員情報変更エラー", async () => {
+    
+    generalUtil.InfoLog("マイページ 会員情報変更エラー Started");
+
+    // 重複したPCアドレスを入力します
+    await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/input")).clear().then(async function(){
+          await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/input")).sendKeys("ohashi@musicsecurities.com");
+        });
+    
+    // 重複した携帯アドレスを入力します
+    await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[10]/td/input")).clear().then(async function () {
+      await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[10]/td/input")).sendKeys("brutal_number").then()
+    });
+
+    await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[10]/td/select/option[@value='ezweb.ne.jp']")).click();
+
+    // submit
+    await driver.findElement(By.xpath("//*[@id='main']/form/div/input")).click();
+
+    // バリデートエラーでスクショをとります
+    await screenshotUtil.takeCapture(driver, 'account_edit_invalid');
+
+    // バリデーションエラーを検証します
+    const invalidEmailMessage = await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/div")).getText();
+    expect(invalidEmailMessage).toBe("入力されたメールアドレスはすでに登録されています");
+
+    // バリデーションエラーを検証します
+    const invalidMobileEmailMessage = await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/div")).getText();
+    expect(invalidMobileEmailMessage).toBe("入力されたメールアドレスはすでに登録されています");
+    
+  });
   
+  /**
+   * @brief マイページで正常入力し、会員情報更新が成功することを検証します。
+   */
+  it("会員情報変更成功", async () => {
+    
+    generalUtil.InfoLog("マイページ 会員情報変更成功 Started");
+
+    // オリジナルのPCアドレスを入力します
+    await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/input")).clear().then(async function(){
+      await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/input"))
+          .sendKeys("e2etestuser" + generalUtil.getDateTimestamp("","","") + "@musicsecurities.com");      
+    });
+    
+    // 携帯アドレスをブランク入力します
+    await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[10]/td/input")).clear().then(async function () {
+      await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[10]/td/select/option[1]")).click();      
+    });
+    
+    // 送信します
+    await driver.findElement(By.xpath("//*[@id='main']/form/div/input")).click();
+
+    // 確認画面のスクショ
+    await screenshotUtil.takeCapture(driver, 'account_edit_confirm');
+
+    // ページ遷移を検証します
+    const asConfirmPageUrl = await driver.getCurrentUrl();
+    expect(asConfirmPageUrl).toBe("https://www.securite.jp/mypage/edit/confirm");
+    
+    // 保存するをクリックします
+    await driver.findElement(By.xpath("//*[@id='main']/form/div/input")).click();
+
+    // 会員情報変更完了画面のスクショ
+    await screenshotUtil.takeCapture(driver, 'account_edit_complete');
+
+    // ページ遷移を検証します
+    const asCompletePageUrl = await driver.getCurrentUrl();
+    expect(asCompletePageUrl).toBe("https://www.securite.jp/mypage/edit/complete");
+    
+  });
   
   it("ログアウト", async () => {
 
@@ -247,9 +359,14 @@ describe("デモ", () => {
 
   });
 
+  /**
+   * TODO: ひかりTVログイン
+   */
+
+  
   it("ゆっくりいそげ1クリック", async () => {
 
-    generalUtil.InfoLog("Yahooログイン Started");
+    generalUtil.InfoLog("ゆっくりいそげ1クリック");
     
     // トップページに戻る
     await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
@@ -257,10 +374,10 @@ describe("デモ", () => {
     const anker = await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[1]/dd/a[1]")).getAttribute("href");
     await driver.findElement(By.xpath("//*[@id=\"main\"]/div[6]/div/dl[1]/dd/a[1]")).click();
 
-    const testingUrl = await driver.getCurrentUrl();
+    const asTargetUrl = await driver.getCurrentUrl();
 
     // アンカーの導通確認
-    expect(testingUrl).toBe(anker);
+    expect(asTargetUrl).toBe(anker);
     await screenshotUtil.takeCapture(driver, 'director_blog1', false);
   });
 

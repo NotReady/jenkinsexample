@@ -1,15 +1,22 @@
-const logLebel = {
+const logLevel = {
     "Error" : 0,
     "Info" : 1,
     "Debug": 2
 }
-var _logLevel = logLebel.Info;
+
+var _logLevel = logLevel.Info;
 
 /**
- * 出力するログをレベルでフィルタします
+ * 出力するログのしきい値です
  * @type {number}
  */
 module.exports.logLevel = _logLevel;
+
+/**
+ * 出力ログレベルの設定値です
+ * @type {{Error: number, Info: number, Debug: number}}
+ */
+module.exports.typeLogLevel = logLevel;
 
 /**
  * エラーレベルのログを出力します
@@ -51,11 +58,36 @@ module.exports.getCounter = function(){
 
 /**
  * タイムスタンプ文字列を取得します
- * @returns {string} YYYYMMDDフォーマットのタイムスタンプ文字列
+ * @params {string} separator 時分秒間のセパレータ
+ * @returns {string} HH{delimiter}MM{delimiter}SSフォーマットのタイムスタンプ文字列
  */
-function getTimestamp(){
+module.exports.getTimestamp = getTimestamp;
+function getTimestamp(separator=":"){
     const  dt = new Date();
-    return dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+    return ( "00" + dt.getHours() ).slice(-2) + separator + ( "00" + dt.getMinutes() ).slice(-2) + separator + ( "00" + dt.getSeconds() ).slice(-2);
+}
+
+/**
+ * 日付スタンプ文字列を取得します
+ * @params {string} separator 年月日間のセパレータ
+ * @returns {string} YYYY{delimiter}MM{delimiter}DDフォーマットの日付スタンプ文字列
+ */
+module.exports.getDatestamp = getDatestamp;
+function getDatestamp(separator="/"){
+    const  dt = new Date();
+    return dt.getFullYear() + separator + ( "00" + dt.getMonth()+1 ).slice(-2) + separator + ( "00" + dt.getDate() ).slice(-2);
+}
+
+/**
+ * 日付タイムスタンプ文字列を取得します
+ * @params {string} dateSeparator 年月日間のセパレータ
+ * @params {string} timeSeparator 時分秒間のセパレータ
+ * @params {string} dateTimeSeparator 日付と時刻間のセパレータ
+ * @returns {string} YYYY{delimiter}MM{delimiter}DDフォーマットの日付スタンプ文字列
+ */
+module.exports.getDateTimestamp = getDateTimestamp;
+function getDateTimestamp(dateSeparator="/", timeSeparator=":", dateTimeSeparator=" "){
+    return getDatestamp(dateSeparator) + dateTimeSeparator + getTimestamp(timeSeparator);
 }
 
 /**
@@ -63,5 +95,5 @@ function getTimestamp(){
  * @param logStr ログ文字列
  */
 function printLog(logStr){
-    console.log(getTimestamp() + ": " + logStr);
+    console.log(getTimestamp() + " " + logStr);
 }
