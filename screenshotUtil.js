@@ -109,7 +109,7 @@ module.exports.takeCapture = async function(driver, fileName, verify=true)
         .ignoreColors()
         .onComplete(function (data){
             fs.writeFileSync(pathFileNameDiff, data.getBuffer());
-            generalUtil.InfoLog(data);
+            generalUtil.DebugLog(data);
             misMatchPercentage = data.rawMisMatchPercentage;
         });
 
@@ -125,7 +125,10 @@ module.exports.takeCapture = async function(driver, fileName, verify=true)
  * スクリーションショット取得に必要なディレクトリをセットアップします。
  */
 module.exports.setUp = function(){
-    // スクショ用のdir作成
+    
+    // スクリーンショットの保存用にディレクトリを作成します
+    
+    // ルートディレクトリがなければ作成します
     global.now = new Date();
     const parentDir = "screen_shot/";
     try{
@@ -138,12 +141,14 @@ module.exports.setUp = function(){
             throw err;
         }
     }
-
+    
     const nameDirsHistory = fs.readdirSync(parentDir);
     global.namePreviousDir = parentDir + nameDirsHistory[nameDirsHistory.length-1] + "/";
     global.nameNewDir = parentDir + date.format(now, 'YYYYMMDDHHmmss').toString() + "/";
     global.nameNewDiffDir = nameNewDir + "diff/";
 
+    // 実行時刻のディレクトリを作成します
     fs.mkdirsSync(nameNewDir);
+    // 差分画像用のディレクトリを作成します
     fs.mkdirsSync(nameNewDiffDir);
 }

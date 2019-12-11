@@ -31,7 +31,7 @@ module.exports.ErrorLog = function(logStr){
  * @constructor
  */
 module.exports.InfoLog = function(logStr){
-    if( _logLevel < 1 ) return;
+    if( _logLevel < logLevel.Info ) return;
     printLog("[INFO]" + logStr);
 }
 
@@ -40,12 +40,12 @@ module.exports.InfoLog = function(logStr){
  * @constructor
  */
 module.exports.DebugLog = function(logStr){
-    if( _logLevel < 2 ) return;
+    if( _logLevel < logLevel.Debug ) return;
     printLog("[DEBUG]" + logStr);
 }
 
 /**
- * 実行環境内共通のカウンタの実装です（クロージャ）
+ * 実行環境内共通のカウンタのクロージャ実装です
  * @note スクリーションショットファイルのプレフィックスに使用します。
  * @returns string 3桁0パディングのカウンタ番号
  */
@@ -75,7 +75,7 @@ function getTimestamp(separator=":"){
 module.exports.getDatestamp = getDatestamp;
 function getDatestamp(separator="/"){
     const  dt = new Date();
-    return dt.getFullYear() + separator + ( "00" + dt.getMonth()+1 ).slice(-2) + separator + ( "00" + dt.getDate() ).slice(-2);
+    return dt.getFullYear() + separator + ( "00" + ( dt.getMonth() + 1 ) ).slice(-2) + separator + ( "00" + dt.getDate() ).slice(-2);
 }
 
 /**

@@ -228,7 +228,7 @@ describe("デモ", () => {
       expect(title).toBe("会員情報変更｜セキュリテ");
     });
     
-    await screenshotUtil.takeCapture(driver, 'account_edit');
+    await screenshotUtil.takeCapture(driver, 'account_edit', false);
   });
 
   /**
@@ -254,7 +254,7 @@ describe("デモ", () => {
     await driver.findElement(By.xpath("//*[@id='main']/form/div/input")).click();
 
     // バリデートエラーでスクショをとります
-    await screenshotUtil.takeCapture(driver, 'account_edit_invalid');
+    await screenshotUtil.takeCapture(driver, 'account_edit_invalid', false);
 
     // バリデーションエラーを検証します
     const invalidEmailMessage = await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/div")).getText();
@@ -288,7 +288,7 @@ describe("デモ", () => {
     await driver.findElement(By.xpath("//*[@id='main']/form/div/input")).click();
 
     // 確認画面のスクショ
-    await screenshotUtil.takeCapture(driver, 'account_edit_confirm');
+    await screenshotUtil.takeCapture(driver, 'account_edit_confirm', false);
 
     // ページ遷移を検証します
     const asConfirmPageUrl = await driver.getCurrentUrl();
@@ -356,7 +356,6 @@ describe("デモ", () => {
     });
 
     await screenshotUtil.takeCapture(driver, 'yahoo - authorized', false);
-
   });
 
   /**
