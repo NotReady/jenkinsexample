@@ -74,8 +74,8 @@ describe("デモ", () => {
     generalUtil.InfoLog("トップページバナー2クリック Started");
     
     // トップページに戻る
-    await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
-
+    await driver.get("https://www.securite.jp");
+    
     const anker = await driver.findElement(By.xpath("//div[@class='gridpane']/div[3]/a")).getAttribute("href");
     await driver.findElement(By.xpath("//div[@class='gridpane']/div[3]/a")).click();
     const testingUrl = await driver.getCurrentUrl();
@@ -91,9 +91,9 @@ describe("デモ", () => {
   it("セキュリテニュース1クリック", async () => {
 
     generalUtil.InfoLog("セキュリテニュース1クリック Started");
-    
+
     // トップページに戻る
-    await driver.findElement(By.xpath("//h1/a[@href='/']")).click();
+    await driver.get("https://www.securite.jp");
 
     const anker = await driver.findElement(By.xpath("//div[@class='topnews clearfix']/dl[1]/dd/ul/li[1]/a")).getAttribute("href");
     await driver.findElement(By.xpath("//div[@class='topnews clearfix']/dl[1]/dd/ul/li[1]/a")).click();
