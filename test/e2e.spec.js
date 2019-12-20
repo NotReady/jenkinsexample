@@ -16,7 +16,6 @@ jest.setTimeout(60000);
 describe("デモ", () => {
   
   beforeAll(() => {
-        
         // driverを取得します
         // TODO: 複数テストケースを回す場合はsingletonでいけるか確認
         driver = factory.getDriver("chrome");
@@ -35,7 +34,7 @@ describe("デモ", () => {
   it("トップページ ページタイトル", async () => {
     
     generalUtil.InfoLog("トップページ ページタイトル Started");
-
+    
     // テスト対象のページへアクセス
     await driver.get("https://www.securite.jp");
 
@@ -186,8 +185,8 @@ describe("デモ", () => {
     generalUtil.InfoLog("ログインページ ログイン成功 Started");
     
     // ログインフォームを入力してログイン
-    await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys("e2etestuser");
-    await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys("e2etestuser");
+    await driver.findElement(By.xpath("//input[@name='msuser']")).sendKeys(process.env.TEST_ID);
+    await driver.findElement(By.xpath("//input[@name='mspwd']")).sendKeys(process.env.TEST_PW);
     await driver.findElement(By.xpath("//input[@value='ログイン']")).click();
 
     /* @test title */
@@ -240,12 +239,12 @@ describe("デモ", () => {
 
     // 重複したPCアドレスを入力します
     await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/input")).clear().then(async function(){
-          await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/input")).sendKeys("ohashi@musicsecurities.com");
+          await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[9]/td/input")).sendKeys(process.env.TEST_EMAIL);
         });
     
     // 重複した携帯アドレスを入力します
     await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[10]/td/input")).clear().then(async function () {
-      await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[10]/td/input")).sendKeys("brutal_number").then()
+      await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[10]/td/input")).sendKeys(process.env.TEST_CMAIL).then()
     });
 
     await driver.findElement(By.xpath("//*[@id='main']/form/table[1]/tbody/tr[10]/td/select/option[@value='ezweb.ne.jp']")).click();
@@ -336,7 +335,7 @@ describe("デモ", () => {
     await screenshotUtil.takeCapture(driver, 'yahoo - authorization', false);
 
     // IDを入力
-    await driver.findElement(By.xpath("//input[@id='username']")).sendKeys("by_lilack");
+    await driver.findElement(By.xpath("//input[@id='username']")).sendKeys(process.env.Y_ID);
     // 次へ
     await driver.findElement(By.xpath("//button[@id='btnNext']")).click();
 
@@ -344,7 +343,7 @@ describe("デモ", () => {
 
     // ボタン表示待ち
     await driver.wait(until.elementLocated(By.xpath("//input[@id='passwd']")), 5*1000).then(el=>{
-      el.sendKeys("YaIkani13");
+      el.sendKeys(process.env.Y_PW);
     });
 
     // ログイン
@@ -356,12 +355,45 @@ describe("デモ", () => {
     });
 
     await screenshotUtil.takeCapture(driver, 'yahoo - authorized', false);
+    
   });
-
+  
   /**
-   * TODO: ひかりTVログイン
+   * @brief ひかり会員ログイン
    */
+  it("ひかりログイン", async () => {
 
+    generalUtil.InfoLog("ひかりログイン Started");
+
+    // ログインページ - ログイン状態の場合は強制ログアウトします
+    await driver.get("https://www.securite.jp/member/login");
+
+    // cookieをクリアして認証エンドポイントへリダイレクト
+    await driver.manage().deleteAllCookies();
+    // ひかりログインボタンをクリックします
+    await driver.findElement(By.xpath("//*[@id=\"login\"]/div[2]/div[3]/a")).click();
+
+    // タイトル検証
+    await driver.getTitle().then(function(title){
+      expect(title).toBe("ひかりＴＶドリーム　ログイン");
+    });
+
+    await screenshotUtil.takeCapture(driver, 'hikari - authorization', false);
+
+    // IDを入力します
+    await driver.findElement(By.xpath("//*[@id=\"webid\"]")).sendKeys(process.env.H_ID);
+    // PWを入力します
+    await driver.findElement(By.xpath("//*[@id=\"password\"]")).sendKeys(process.env.H_PW);
+    // ログイン
+    await driver.findElement(By.xpath("//*[@id=\"login\"]")).click();
+
+    // セキュリテにリダイレクト
+    await driver.getTitle().then(function (title) {
+      expect(title).toBe("セキュリテ - インパクト投資プラットフォーム");
+    });
+    
+    await screenshotUtil.takeCapture(driver, 'hikari - authorized');
+  });
   
   it("ゆっくりいそげ1クリック", async () => {
 
