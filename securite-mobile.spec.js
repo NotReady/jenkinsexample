@@ -2,9 +2,9 @@
 const webdriver = require("selenium-webdriver");
 const { By, until } = webdriver;
 // utirities
-const factory  = require("../driverUtil.js");
-const screenshotUtil  = require("../screenshotUtil");
-const generalUtil  = require("../generalUtil");
+const factory  = require("./driverUtil.js");
+const screenshotUtil  = require("./screenshotUtil");
+const generalUtil  = require("./generalUtil");
 let driver;
 
 /**
